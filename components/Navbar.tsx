@@ -6,12 +6,12 @@ const Navbar = () => {
         <nav>
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <div>
-                    <Link href="/" className="font-lobster" >
+                    <Link href="/" className="font-lobster text-xl" >
                         ChefSphere <span className="text-orange">.</span>
                     </Link>
                 </div>
 
-                <div className="m-0 self-stretch flex flex-row items-start justify-between gap-[1.25rem] text-left text-[1rem] text-black font-inter" >
+                <div className="hidden m-0 self-stretch md:flex flex-row items-start justify-between gap-[1.25rem] text-left text-[1rem] text-black font-inter" >
 
                     <Link href="/" className="relative tracking-[-0.02em] font-medium inline-block min-w-[2.813rem]">
                         Home

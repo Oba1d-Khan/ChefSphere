@@ -4,8 +4,7 @@
 
 body {
   @apply leading-[normal] m-0;
-  background-color: black;
-  color: white;
+  
 }
 
 *,

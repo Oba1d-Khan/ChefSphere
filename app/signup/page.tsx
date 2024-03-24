@@ -39,54 +39,85 @@ const SignupPage = () => {
     };
 
     return (
-        <div className="flex flex-col gap-6 my-10 items-center justify-center">
-            <h1 className="m-0 relative text-inherit tracking-[-0.04em] font-semibold font-inherit whitespace-nowrap mq450:text-[2.375rem] mq1000:text-[3.188rem]">
-                Sign Up
-            </h1>
+        <section className="max-w-[80vw] mx-auto py-20 ">
+      <div>
+        <h1 className="text-[64px] text-center tracking-[-0.04em] font-semibold text-black pb-20">
+          Sign Up
+        </h1>
+      </div>
 
-            <label htmlFor="username" >Name</label>
-            <input
-                className="p-3 rounded-lg text-black"
-                id="username"
-                type="text"
-                placeholder="Enter Username..."
+      <div className=" flex flex-col md:flex-row md:justify-center md:items-center gap-20">
+        <div className=" rounded-3xl bg-gradient-to-b from-white to-green ">
+          <Image
+            src="/images/chef-1.png"
+            width={400}
+            height={400}
+            alt="chef"
+            className="object-cover  md:max-w-[20vw]"
+          />
+        </div>
+
+        <div className="py-12">
+          <form className="w-[20rem] mx-auto ">
+            <div className="mb-5">
+              <label className="block mb-2 text-xs font-medium text-gray-700  uppercase tracking-wider ">
+                Name
+              </label>
+              <input
+                type="name"
+                className="shadow-sm bg-white border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
+                placeholder="Enter your name..."
+                required
                 onChange={(e) => setUser({ ...user, username: e.target.value })}
-            />
+              />
+            </div>
 
-            <label htmlFor="email">Email:</label>
-            <input
-                className="p-3 rounded-lg text-black"
+            <div className="mb-5">
+              <label className="block mb-2 text-xs font-medium text-gray-900  uppercase tracking-wider">
+                Email Address
+              </label>
+              <input
+                type="email"
                 id="email"
-                type="text"
-                placeholder="Enter Email..."
+                className="shadow-sm bg-white border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
+                placeholder="Your email address..."
+                required
                 onChange={(e) => setUser({ ...user, email: e.target.value })}
-            />
-
-            <label htmlFor="password">Password:</label>
-            <input
-                className="p-3 rounded-lg text-black"
+              />
+            </div>
+            <div className="mb-5">
+              <label className="block mb-2 text-xs font-medium text-gray-900 uppercase tracking-wider">
+                Password
+              </label>
+              <input
+                type="password"
                 id="password"
-                type="text"
-                placeholder="Enter Password..."
+                className="shadow-sm bg-white border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
+                placeholder="Your Password"
+                required
                 onChange={(e) => setUser({ ...user, password: e.target.value })}
-            />
+              />
+            </div>
 
-            <button
-                className={`${buttonDisabled
-                    ? "py-2 px-6 bg-blue-500 rounded-xl opacity-45 cursor-not-allowed"
-
-                    : "py-2 px-6 bg-blue-500 rounded-xl "
-                    }`}
-                onClick={onSignUp}
-            >
+            <div className="flex justify-center items-center">
+              <button
+                type="submit"
+                className="text-white bg-black hover:bg-black/35 font-medium rounded-xl text-sm px-12 py-5 text-center "
+              >
                 SignUp
-            </button>
+              </button>
+            </div>
 
-            <Link className="underline " href="/login">
-                Already have an account?
-            </Link>
-        </div >
-    );
+            <div className="flex gap-2 py-10 items-center justify-center">
+              <p>Already have an account?</p>
+              <Link href="/login" className="text-orange font-medium">Log In</Link>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  );
+    
 };
 
-export default SignupPage;
+export default SignupPage;
