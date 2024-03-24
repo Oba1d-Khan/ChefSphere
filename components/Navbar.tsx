@@ -6,7 +6,7 @@ const Navbar = () => {
         <nav>
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <div>
-                    <Link href="path" className="font-lobster" >
+                    <Link href="/" className="font-lobster" >
                         ChefSphere <span className="text-orange">.</span>
                     </Link>
                 </div>
