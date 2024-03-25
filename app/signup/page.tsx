@@ -6,40 +6,40 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 const SignupPage = () => {
-    const [user, setUser] = useState({
-        username: "",
-        email: "",
-        password: "",
-    });
+  const [user, setUser] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
 
-    const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [buttonDisabled, setButtonDisabled] = useState(true);
 
-    useEffect(() => {
-        if (
-            user.username.length > 6 &&
-            user.password.length > 6 &&
-            user.email.length > 0
-        ) {
-            setButtonDisabled(false);
-        } else {
-            setButtonDisabled(true);
-        }
+  useEffect(() => {
+    if (
+      user.username.length > 6 &&
+      user.password.length > 6 &&
+      user.email.length > 0
+    ) {
+      setButtonDisabled(false);
+    } else {
+      setButtonDisabled(true);
+    }
 
-    }, [user]);
+  }, [user]);
 
-    const router = useRouter();
-    const onSignUp = async () => {
-        try {
-            const response = await axios.post("/api/users/signup", user);
-            router.push("/login")
-        } catch (error: any) {
-            console.log(error.message);
+  const router = useRouter();
+  const onSignUp = async () => {
+    try {
+      const response = await axios.post("/api/users/signup", user);
+      router.push("/login")
+    } catch (error: any) {
+      console.log(error.message);
 
-        }
-    };
+    }
+  };
 
-    return (
-        <section className="max-w-[80vw] mx-auto py-20 ">
+  return (
+    <section className="max-w-[80vw] mx-auto py-20 ">
       <div>
         <h1 className="text-[64px] text-center tracking-[-0.04em] font-semibold text-black pb-20">
           Sign Up
@@ -58,7 +58,7 @@ const SignupPage = () => {
         </div>
 
         <div className="py-12">
-          <form className="w-[20rem] mx-auto ">
+          <form className="w-[20rem] mx-auto " onSubmit={onSignUp}>
             <div className="mb-5">
               <label className="block mb-2 text-xs font-medium text-gray-700  uppercase tracking-wider ">
                 Name
@@ -115,9 +115,9 @@ const SignupPage = () => {
           </form>
         </div>
       </div>
-    </section>
-  );
-    
+    </section>
+  );
+
 };
 
-export default SignupPage;
+export default SignupPage;
