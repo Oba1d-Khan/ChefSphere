@@ -14,10 +14,10 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect(new URL("/profile", req.nextUrl));
     }
     if (!publicPaths && !token) {
-        return NextResponse.redirect(new URL("/", req.nextUrl));
+        return NextResponse.redirect(new URL("/login", req.nextUrl));
     }
 }
 
 export const config = {
-    matcher: ["/", "/signup", "/login", "/profile"],
+    matcher: ["/", "/signup", "/login", "/profile", "/recipes", "/chat"],
 };
