@@ -6,16 +6,16 @@ const UserProfile = () => {
     console.log(session);
 
     return (
-        <div className="h-screen flex flex-col justify-around items-center border border-gray-200 text-2xl">
+        <div className="h-[60vh] flex flex-col justify-around items-center  text-2xl">
 
-            <h1>PROFILE PAGE</h1>
-            <h1 className="">Welcome! -
+            <h1 className="text-xl font-medium">PROFILE PAGE</h1>
+            <h1 className="text-lg">Welcome! -
                 {session &&
-                    <span className="bg-orange rounded-full px-4 py-2 mx-2 font-semibold italic">{session.user?.email} </span>
+                    <span className="bg-green rounded-full px-4 py-2 mx-2 font-semibold italic">{session.user?.email} </span>
                 }
             </h1>
 
-            <button className="py-2 px-6 bg-blue-500 rounded-xl"
+            <button className="py-2 px-6 bg-green rounded-xl font-semibold"
                 onClick={() => signOut()}
             >
                 Logout
