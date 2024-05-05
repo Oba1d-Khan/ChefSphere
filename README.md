@@ -1,4 +1,4 @@
-# ChefSphere - Food Recipe App
+# ChefSphere - Food Recipe Web App
 
 ChefSphere is a web application developed as a Final Year Project (FYP) to provide users with a platform to discover, share, and explore various food recipes. The application is built using the MERN stack , ensuring efficient and dynamic user experiences. Additionally, several libraries and packages have been integrated into the project to enhance functionality and security.
 
