@@ -123,21 +123,22 @@ const PostPage = () => {
 				</Flex>
 			</Flex>
 
-			{currentPost.img && (
-				<Box
-					my={10}
-					maxWidth={"sm"}
-					borderRadius={6}
-					overflow={"hidden"}
-					border={"1px solid"}
-					borderColor={"gray.light"}
-				>
-					<Image src={currentPost.img} w={"full"} />
-				</Box>
-			)}
-
-			<Flex gap={3} my={3}>
-				<Actions post={currentPost} />
+			<Flex gap={6}>
+				<Flex gap={3} my={3}>
+					<Actions post={currentPost} />
+				</Flex>
+				{currentPost.img && (
+					<Box
+						mb={10}
+						maxWidth={"lg"}
+						borderRadius={6}
+						overflow={"hidden"}
+						border={"1px solid"}
+						borderColor={"gray.light"}
+					>
+						<Image src={currentPost.img} w={"full"} />
+					</Box>
+				)}
 			</Flex>
 
 			<Flex gap={3} my={3} flexDirection={"column"}>

@@ -97,22 +97,25 @@ const Post = ({ post, postedBy }) => {
 
 					<Text my={3} fontSize={"2xl"} color={"black"}>{post.recipeTitle}</Text>
 
-					{post.img && (
-						<Box borderRadius={6} overflow={"hidden"} border={"1px solid"} borderColor={"gray.light"}>
-							<Image src={post.img} w={"full"} />
-						</Box>
-					)}
+					<Flex gap={3} my={1}>
+						<Flex gap={3} >
+							<Actions post={post} />
+						</Flex>
+						{post.img && (
+							<Box borderRadius={6} overflow={"hidden"} border={"1px solid"} borderColor={"gray.light"}>
+								<Image src={post.img} w={"full"} minHeight={"xl"} />
+							</Box>
+						)}
+
+					</Flex>
+
+
 					<Flex gap={3} my={3} flexDirection={"column"}>
 						<Text fontSize={"md"}>{post.text}</Text>
 						<Text fontSize={"md"}>{post.recipeOrigin}</Text>
 						<Text fontSize={"md"}>{post.cookingTime}</Text>
 					</Flex>
 					<Text fontSize={"md"}>{post.tags}</Text>
-
-
-					<Flex gap={3} my={1}>
-						<Actions post={post} />
-					</Flex>
 
 					{post.replies.length === 0 && <Text textAlign={"center"} color={"gray.light"} fontSize={"xs"}>no comments yet</Text>}
 				</Flex>

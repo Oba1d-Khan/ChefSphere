@@ -106,8 +106,8 @@ const Actions = ({ post }) => {
 	};
 
 	return (
-		<Flex flexDirection='column'>
-			<Flex gap={3} my={2} onClick={(e) => e.preventDefault()}>
+		<Flex >
+			<Flex gap={3} my={2} mx={2} flexDirection='column' alignItems={"center"} onClick={(e) => e.preventDefault()}>
 				<svg
 					aria-label='Like'
 					color={liked ? "rgb(137, 250, 125)" : ""}
@@ -124,8 +124,8 @@ const Actions = ({ post }) => {
 						strokeWidth='2'
 					></path>
 				</svg>
-				<Text color={"gray.light"} fontSize='sm'>
-					{post.likes.length} likes
+				<Text color={"gray.light"} fontSize='sm' fontWeight={"semibold"}>
+					{post.likes.length}
 
 				</Text>
 				<svg
@@ -147,8 +147,8 @@ const Actions = ({ post }) => {
 					></path>
 				</svg>
 
-				<Text color={"gray.light"} fontSize='sm'>
-					{post.replies.length} replies
+				<Text color={"gray.light"} fontSize='sm' fontWeight={"semibold"}>
+					{post.replies.length}
 				</Text>
 			</Flex>
 

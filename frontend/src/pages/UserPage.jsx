@@ -23,8 +23,8 @@ const UserPage = () => {
 			try {
 				const res = await fetch(`/api/posts/user/${username}`);
 				const data = await res.json();
-				console.log(data);
 				setPosts(data);
+				console.log("data:", data);
 			} catch (error) {
 				showToast("Error", error.message, "error");
 				setPosts([]);
@@ -76,6 +76,8 @@ const UserPage = () => {
 					<SuggestedUsers />
 				</Box>
 			</Flex>
+
+
 		</>
 	);
 };

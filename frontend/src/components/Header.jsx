@@ -19,11 +19,11 @@ const Header = () => {
 	return (
 
 		<>
-			<nav className="bg-white text-black p-4">
-				<div className="container mx-auto flex justify-between items-center">
+			<nav className="p-4 text-black bg-white">
+				<div className="container flex items-center justify-between mx-auto">
 					<a className="text-lg font-semibold" src={colorMode === "light" ? "/chefsphere_logo.svg" : "/chefsphere_logo.svg"}
-						// onClick={toggleColorMode}
-						>
+					// onClick={toggleColorMode}
+					>
 						ChefSphere
 					</a>
 					<div className="flex justify-center flex-1 ">
@@ -34,7 +34,7 @@ const Header = () => {
 							</Link>
 						)}
 						{!user && (
-							<Link   className="mx-14" as={RouterLink} to={"/auth"} onClick={() => setAuthScreen("login")}>
+							<Link className="mx-14" as={RouterLink} to={"/auth"} onClick={() => setAuthScreen("login")}>
 								Login
 							</Link>
 						)}
@@ -65,25 +65,25 @@ const Header = () => {
 						)}
 					</div>
 					<div className="flex items-center">
-						<a href="https://web.facebook.com/?_rdc=1&_rdr" target="_blank" className="hover:text-gray-400 mr-4">
-							<svg fill="currentColor" viewBox="0 0 24 24" className="h-6 w-6">
+						<a href="https://web.facebook.com/?_rdc=1&_rdr" target="_blank" className="mr-4 hover:text-gray-400">
+							<svg fill="currentColor" viewBox="0 0 24 24" className="w-6 h-6">
 								<image href="/public/icons8-facebook.svg" width="24" height="24" />
 							</svg>
 						</a>
-						<a href="https://twitter.com/" target="_blank" className="hover:text-gray-400 mr-4">
-							<svg fill="currentColor" viewBox="0 0 24 24" className="h-6 w-6">
+						<a href="https://twitter.com/" target="_blank" className="mr-4 hover:text-gray-400">
+							<svg fill="currentColor" viewBox="0 0 24 24" className="w-6 h-6">
 								<image href="/public/icons8-twitterx.svg" width="24" height="24" />
 							</svg>
 						</a>
-						<a href="https://www.instagram.com/" target="_blank" className="hover:text-gray-400 mr-4">
-							<svg fill="currentColor" viewBox="0 0 24 24" className="h-6 w-6">
+						<a href="https://www.instagram.com/" target="_blank" className="mr-4 hover:text-gray-400">
+							<svg fill="currentColor" viewBox="0 0 24 24" className="w-6 h-6">
 								<image href="/public/icons8-instagram.svg" width="24" height="24" />
 							</svg>
 						</a>
 					</div>
 				</div>
 			</nav>
-			
+
 		</>
 	);
 };

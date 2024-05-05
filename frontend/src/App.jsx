@@ -16,7 +16,7 @@ function App() {
 	const { pathname } = useLocation();
 	return (
 		<Box position={"relative"} w='full'>
-			<Container maxW={pathname === "/" ? { base: "620px", md: "1000px" } : "1000px"}>
+			<Container maxW={pathname === "/" ? { base: "620px", md: "1200px" } : "1200px"}>
 				<Header />
 				<Routes>
 					<Route path='/' element={user ? <HomePage /> : <Navigate to='/auth' />} />
