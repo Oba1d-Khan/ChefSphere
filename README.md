@@ -1,6 +1,6 @@
 # ChefSphere - Food Recipe App
 
-ChefSphere is a web application developed as a Final Year Project (FYP) to provide users with a platform to discover, share, and explore various food recipes. The application is built using the MERN stack with Next.js instead of Express.js for server-side rendering, ensuring efficient and dynamic user experiences. Additionally, several libraries and packages have been integrated into the project to enhance functionality and security.
+ChefSphere is a web application developed as a Final Year Project (FYP) to provide users with a platform to discover, share, and explore various food recipes. The application is built using the MERN stack , ensuring efficient and dynamic user experiences. Additionally, several libraries and packages have been integrated into the project to enhance functionality and security.
 
 ## Features
 
@@ -12,15 +12,9 @@ ChefSphere is a web application developed as a Final Year Project (FYP) to provi
 ## Tech Stack
 
 - *Frontend:*
-  - Nextjs: A React framework for server-side rendering and efficient client-side navigation.
   - Reactjs: A JavaScript library for building user interfaces.
-  - Axios: A promise-based HTTP client for making API requests.
-  - TailwindCSS: A utility-first CSS framework for rapidly building modern websites 
-  
+  - Chakra UI: A modular and accessible component library that gives you the building blocks you need to build your React applications.  
 - *Backend:*
   - Node.js: A JavaScript runtime for building server-side applications.
   - MongoDB: A NoSQL database for storing recipe data.
   - Mongoose: An ODM (Object Data Modeling) library for MongoDB and Node.js.
-  - Nodemailer: A module for sending emails for functionalities like password reset or verification.
-  - Bcrypt.js: A library that hash passwords securely.
-  - TypeScript: A superset of JavaScript that adds optional static typing.
