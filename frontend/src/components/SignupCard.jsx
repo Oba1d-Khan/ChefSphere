@@ -23,26 +23,26 @@ import userAtom from "../atoms/userAtom";
 
 export default function SignupCard() {
 	const [showPassword, setShowPassword] = useState(false);
-	
+	const [showConfirmPassword, setShowConfirmPassword] = useState(false); // New state for confirm password
 	const setAuthScreen = useSetRecoilState(authScreenAtom);
 	const [inputs, setInputs] = useState({
 		name: "",
 		username: "",
 		email: "",
 		password: "",
-		confirmPassword:"",
+		confirmPassword: "",
 	});
 
-	
-
-if (password === confirmPassword) {
-	setInputs(...inputs , confirmPassword )
-}
 	const showToast = useShowToast();
 	const setUser = useSetRecoilState(userAtom);
 
 	const handleSignup = async () => {
 		try {
+			if (inputs.password !== inputs.confirmPassword) {
+				showToast("Error", "Passwords do not match", "error");
+				return;
+			}
+
 			const res = await fetch("/api/users/signup", {
 				method: "POST",
 				headers: {
@@ -57,7 +57,7 @@ if (password === confirmPassword) {
 				return;
 			}
 
-			localStorage.setItem("user-posts", JSON.stringify(data));
+			localStorage.setItem("user-threads", JSON.stringify(data));
 			setUser(data);
 		} catch (error) {
 			showToast("Error", error, "error");
@@ -126,17 +126,16 @@ if (password === confirmPassword) {
 							<FormLabel>Confirm Password</FormLabel>
 							<InputGroup>
 								<Input
-									type={showPassword ? "text" : "password"}
-									onChange={(e) => setInputs({ ...inputs, })
-										}
+									type={showConfirmPassword ? "text" : "password"} // Use the same state variable
+									onChange={(e) => setInputs({ ...inputs, confirmPassword: e.target.value })}
 									value={inputs.confirmPassword}
 								/>
 								<InputRightElement h={"full"}>
 									<Button
 										variant={"ghost"}
-										onClick={() => setShowPassword((showPassword) => !showPassword)}
+										onClick={() => setShowConfirmPassword((showConfirmPassword) => !showConfirmPassword)} // Toggle the state
 									>
-										{showPassword ? <ViewIcon /> : <ViewOffIcon />}
+										{showConfirmPassword ? <ViewIcon /> : <ViewOffIcon />}
 									</Button>
 								</InputRightElement>
 							</InputGroup>
