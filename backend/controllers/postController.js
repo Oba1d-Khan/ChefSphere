@@ -168,4 +168,18 @@ const getUserPosts = async (req, res) => {
 	}
 };
 
-export { createPost, getPost, deletePost, likeUnlikePost, replyToPost, getFeedPosts, getUserPosts };
+const searchPosts = async (req, res) => {
+	try {
+		const search = req.query.q;
+		console.log("search :", search);
+		if (!search) {
+			return res.status(400).json({ error: "Search query is required" });
+		}
+		const searchedPosts = await Post.find({ recipeTitle: { $regex: search, $options: 'i' } });
+
+		res.status(200).json(searchedPosts);
+	} catch (err) {
+		res.status(500).json({ error: err.message });
+	}
+};
+export { createPost, getPost, deletePost, likeUnlikePost, replyToPost, getFeedPosts, getUserPosts, searchPosts };
