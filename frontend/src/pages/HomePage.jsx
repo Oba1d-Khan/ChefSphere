@@ -10,6 +10,7 @@ const HomePage = () => {
 	const [loading, setLoading] = useState(true);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [searchedPosts, setSearchedPosts] = useState([]);
+	const [searchClicked, setSearchClicked] = useState(false);
 	const showToast = useShowToast();
 	useEffect(() => {
 		const getFeedPosts = async () => {
@@ -37,6 +38,11 @@ const HomePage = () => {
 		e.preventDefault();
 		setLoading(true);
 		try {
+			if (!searchQuery) {
+				setSearchedPosts([]);
+				return;
+			}
+
 			const res = await fetch(`/api/posts/search?q=${searchQuery}`);
 			const searchData = await res.json();
 			console.log("search data from handle search", searchData);
@@ -45,6 +51,7 @@ const HomePage = () => {
 				return;
 			}
 			setSearchedPosts(searchData);
+			setSearchClicked(true);
 		} catch (error) {
 			showToast("Error", error.message, "error");
 		} finally {
@@ -52,6 +59,11 @@ const HomePage = () => {
 		}
 	};
 
+	const clearSearch = () => {
+		setSearchQuery("");
+		setSearchedPosts([]);
+		setSearchClicked(false);
+	}
 	return (
 		<div>
 			<div className="">
@@ -95,15 +107,30 @@ const HomePage = () => {
 					>
 						Search
 					</button>
+					<button
+						onClick={clearSearch}
+						className="px-4 py-2 ml-2 font-bold text-white bg-red-500 rounded hover:bg-red-700"
+					>
+						Clear
+					</button>
 				</form>
 			</div>
 
 			<div className="">
-				{!loading && searchedPosts.length === 0 && (
-					<div>
-						<h1>No results found</h1>
+				{loading && searchQuery.length > 0 && searchedPosts.length === 0 && (
+					<div className="">
+						<Spinner size="xl" />
 					</div>
+
 				)}
+
+				{
+					!loading && searchedPosts.length === 0 && (
+						<div>
+							<h1>No results found</h1>
+						</div>
+					)
+				}
 
 
 				{searchedPosts.length > 0 && (
