@@ -19,6 +19,8 @@ import {
 	useDisclosure,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // Import Quill styles
 import usePreviewImg from "../hooks/usePreviewImg";
 import { BsFillImageFill } from "react-icons/bs";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -50,17 +52,9 @@ const CreatePost = () => {
 		setPostTitle(inputTitle);
 	};
 
-	const handleTextChange = (e) => {
-		const inputText = e.target.value;
-
-		if (inputText.length > MAX_CHAR) {
-			const truncatedText = inputText.slice(0, MAX_CHAR);
-			setPostText(truncatedText);
-			setRemainingChar(0);
-		} else {
-			setPostText(inputText);
-			setRemainingChar(MAX_CHAR - inputText.length);
-		}
+	const handleTextChange = (value) => {
+		setPostText(value);
+		setRemainingChar(MAX_CHAR - value.length);
 	};
 
 	const handleRecipeOrigin = (e) => {
@@ -73,15 +67,12 @@ const CreatePost = () => {
 		const inputCookingTime = e.target.value;
 		setCookingTime(inputCookingTime);
 		console.log(inputCookingTime);
-
 	};
-
 
 	const handleTags = (e) => {
 		const inputTags = e.target.value;
 		setTags(inputTags);
 		console.log(inputTags);
-
 	};
 
 	const handleCreatePost = async () => {
@@ -165,6 +156,7 @@ const CreatePost = () => {
 								onChange={handleTitleChange}
 								value={postTitle}
 							/>
+
 							<Text
 								fontSize="xs"
 								fontWeight="bold"
@@ -187,11 +179,22 @@ const CreatePost = () => {
 								Recipe Description
 							</Text>
 
-							<Textarea
-								placeholder="Enter Recipe Details..."
-								onChange={handleTextChange}
+							<ReactQuill
 								value={postText}
+								onChange={handleTextChange}
+								theme="snow"
+								modules={{
+									toolbar: [
+										[{ header: "1" }, { header: "2" }, { font: [] }],
+										[{ list: "ordered" }, { list: "bullet" }],
+										["bold", "italic", "underline"],
+										[{ color: [] }, { background: [] }],
+										[{ align: [] }],
+										["clean"],
+									],
+								}}
 							/>
+
 							<Text
 								fontSize="xs"
 								fontWeight="bold"
@@ -217,7 +220,6 @@ const CreatePost = () => {
 								onChange={handleCookingTime}
 								value={cookingTime}
 							/>
-
 
 							<Text
 								fontSize="lg"
@@ -251,7 +253,6 @@ const CreatePost = () => {
 								value={tags}
 							/>
 
-
 							<Input
 								type="file"
 								hidden
@@ -260,11 +261,10 @@ const CreatePost = () => {
 							/>
 
 							<BsFillImageFill
-								style={{ marginLeft: "15px", marginTop: "15px", cursor: "pointer", }}
+								style={{ marginLeft: "15px", marginTop: "15px", cursor: "pointer" }}
 								size={26}
 								onClick={() => imageRef.current.click()}
 							/>
-
 						</FormControl>
 
 						{imgUrl && (
@@ -294,7 +294,7 @@ const CreatePost = () => {
 						</Button>
 					</ModalFooter>
 				</ModalContent>
-			</Modal >
+			</Modal>
 		</>
 	);
 };

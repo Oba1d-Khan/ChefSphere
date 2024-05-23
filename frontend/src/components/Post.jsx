@@ -10,6 +10,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import postsAtom from "../atoms/postsAtom";
 import { Trash2Icon } from "lucide-react";
+import parse from "html-react-parser";
 
 const Post = ({ post, postedBy }) => {
 	const [user, setUser] = useState(null);
@@ -98,7 +99,7 @@ const Post = ({ post, postedBy }) => {
 					<Text my={3} fontSize={"2xl"} color={"black"}>{post.recipeTitle}</Text>
 
 					<Flex gap={3} my={1}>
-						<Flex gap={3} >
+						<Flex gap={3}>
 							<Actions post={post} />
 						</Flex>
 						{post.img && (
@@ -106,12 +107,10 @@ const Post = ({ post, postedBy }) => {
 								<Image src={post.img} w={"full"} minHeight={"xl"} />
 							</Box>
 						)}
-
 					</Flex>
 
-
 					<Flex gap={3} my={3} flexDirection={"column"}>
-						<Text fontSize={"md"}>{post.text}</Text>
+						<Box fontSize={"md"}>{parse(post.text)}</Box>
 						<Text fontSize={"md"}>{post.recipeOrigin}</Text>
 						<Text fontSize={"md"}>{post.cookingTime}</Text>
 					</Flex>

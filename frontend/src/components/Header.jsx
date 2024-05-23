@@ -18,7 +18,9 @@ const Header = () => {
 				<Container maxW="container.lg">
 					<Flex justify="space-between" align="center">
 						<Text fontSize="lg" fontWeight="semibold">
-							<Link as={RouterLink} to="/" src="/chefsphere_logo.svg">
+							<Link as={RouterLink} to="/" src="/chefsphere_logo.svg"
+							// onClick={toggleColorMode}
+							>
 								ChefSphere
 							</Link>
 						</Text>
