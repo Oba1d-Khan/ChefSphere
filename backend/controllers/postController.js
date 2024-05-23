@@ -182,4 +182,14 @@ const searchPosts = async (req, res) => {
 		res.status(500).json({ error: err.message });
 	}
 };
-export { createPost, getPost, deletePost, likeUnlikePost, replyToPost, getFeedPosts, getUserPosts, searchPosts };
+
+
+const getAllRecipes = async (req, res) => {
+	try {
+		const recipes = await Post.find({ category: 'recipe' });
+		res.status(200).json(recipes);
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+};
+export { createPost, getPost, deletePost, likeUnlikePost, replyToPost, getFeedPosts, getUserPosts, searchPosts, getAllRecipes };
