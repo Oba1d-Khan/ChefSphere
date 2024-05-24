@@ -14,13 +14,14 @@ const Message = ({ ownMessage, message }) => {
 			{ownMessage ? (
 				<Flex gap={2} alignSelf={"flex-end"}>
 					{message.text && (
-						<Flex bg={"green.800"} maxW={"350px"} p={1} borderRadius={"md"}>
+						<Flex bg={"green.600"} maxW={"350px"} p={1} borderRadius={"md"}>
 							<Text color={"white"}>{message.text}</Text>
 							<Box
 								alignSelf={"flex-end"}
 								ml={1}
 								color={message.seen ? "blue.400" : ""}
 								fontWeight={"bold"}
+								px={1}
 							>
 								<BsCheck2All size={16} />
 							</Box>

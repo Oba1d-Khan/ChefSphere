@@ -30,7 +30,7 @@ const Conversation = ({ conversation, isOnline }) => {
 			p={"1"}
 			_hover={{
 				cursor: "pointer",
-				bg: useColorModeValue("green.600", "green.400"),
+				bg: useColorModeValue("green.500", "green.400"),
 				color: "white",
 			}}
 			onClick={() =>
@@ -43,7 +43,7 @@ const Conversation = ({ conversation, isOnline }) => {
 				})
 			}
 			bg={
-				selectedConversation?._id === conversation._id ? (colorMode === "light" ? "green.400" : "green.600") : ""
+				selectedConversation?._id === conversation._id ? (colorMode === "light" ? "green.200" : "gray.300") : ""
 			}
 			borderRadius={"md"}
 		>

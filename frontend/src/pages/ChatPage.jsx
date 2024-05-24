@@ -119,7 +119,7 @@ const ChatPage = () => {
 		<Box
 			position={"absolute"}
 			left={"50%"}
-			w={{ base: "100%", md: "80%", lg: "750px" }}
+			w={{ base: "100%", md: "80%", lg: "1000px" }}
 			p={4}
 			transform={"translateX(-50%)"}
 		>
