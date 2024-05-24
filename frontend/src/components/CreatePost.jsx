@@ -123,13 +123,16 @@ const CreatePost = () => {
 		<>
 			<Button
 				position={"fixed"}
-				bottom={10}
-				right={5}
-				bg={useColorModeValue("gray.300", "gray.dark")}
+				bottom={20}
+				right={10}
+				bg={useColorModeValue("green.100", "gray.700")}
+				border="1px"
+				borderColor={"green.400"}
 				onClick={onOpen}
+				_hover={{ bgGradient: 'linear(to-r, #5ED20A, #9CCC65)', opacity: 0.9 }}
 				size={{ base: "sm", sm: "md" }}
 			>
-				<AddIcon />
+				<AddIcon /> <Text px={2} > Create Post</Text>
 			</Button>
 
 			<Modal isOpen={isOpen} onClose={onClose}>

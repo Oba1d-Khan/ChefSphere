@@ -1,10 +1,19 @@
-import { Box, Button, Container, Flex, Link, Text, useColorMode } from "@chakra-ui/react";
+import {
+	Box,
+	Button,
+	Container,
+	Flex,
+	Link,
+	Text,
+	useColorMode,
+} from "@chakra-ui/react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import userAtom from "../atoms/userAtom";
-import { Link as RouterLink } from "react-router-dom";
+import { NavLink as RouterNavLink } from "react-router-dom";
 import { FiLogOut } from "react-icons/fi";
+import userAtom from "../atoms/userAtom";
 import useLogout from "../hooks/useLogout";
 import authScreenAtom from "../atoms/authAtom";
+
 const Header = () => {
 	const { colorMode, toggleColorMode } = useColorMode();
 	const user = useRecoilValue(userAtom);
@@ -12,31 +21,53 @@ const Header = () => {
 	const setAuthScreen = useSetRecoilState(authScreenAtom);
 
 	return (
-
 		<>
 			<Box bg="white" color="black" p={4} borderRadius={"3xl"} my={"4"}>
 				<Container maxW="container.lg">
 					<Flex justify="space-between" align="center">
-						<Text fontSize="2xl"  fontFamily={"Lobster"}>
-							<Link as={RouterLink} to="/" src="/chefsphere_logo.svg"
-							// onClick={toggleColorMode}
-							>
+						<Text fontSize="2xl" fontFamily={"Lobster"}>
+							<Link as={RouterNavLink} to="/" exact>
 								ChefSphere
 							</Link>
 						</Text>
 						<Flex flex="1" justify="center">
 							{user ? (
 								<>
-									<Link as={RouterLink} to="/" mx={4} _hover={{ color: "gray.400" }}>
+									<Link
+										as={RouterNavLink}
+										to="/"
+										exact
+										mx={4}
+										_hover={{ color: "green.800" }}
+										_activeLink={{ textDecoration: "underline" }}
+									>
 										Home
 									</Link>
-									<Link as={RouterLink} to={`/${user.username}`} mx={4} _hover={{ color: "gray.400" }}>
+									<Link
+										as={RouterNavLink}
+										to={`/${user.username}`}
+										mx={4}
+										_hover={{ color: "green.800" }}
+										_activeLink={{ textDecoration: "underline" }}
+									>
 										Profile
 									</Link>
-									<Link as={RouterLink} to="/recipes" mx={4} _hover={{ color: "gray.400" }}>
+									<Link
+										as={RouterNavLink}
+										to="/recipes"
+										mx={4}
+										_hover={{ color: "green.800" }}
+										_activeLink={{ textDecoration: "underline" }}
+									>
 										Recipes
 									</Link>
-									<Link as={RouterLink} to="/chat" mx={4} _hover={{ color: "gray.400" }}>
+									<Link
+										as={RouterNavLink}
+										to="/chat"
+										mx={4}
+										_hover={{ color: "green.800" }}
+										_activeLink={{ textDecoration: "underline" }}
+									>
 										Chat
 									</Link>
 									<Button size="xs" onClick={logout} ml={4}>
@@ -45,10 +76,24 @@ const Header = () => {
 								</>
 							) : (
 								<>
-									<Link as={RouterLink} to="/auth" mx={4} _hover={{ color: "gray.400" }} onClick={() => setAuthScreen("login")}>
+									<Link
+										as={RouterNavLink}
+										to="/auth"
+										mx={4}
+										_hover={{ color: "green.800" }}
+										_activeLink={{ textDecoration: "underline" }}
+										onClick={() => setAuthScreen("login")}
+									>
 										Login
 									</Link>
-									<Link as={RouterLink} to="/auth" mx={4} _hover={{ color: "gray.400" }} onClick={() => setAuthScreen("signup")}>
+									<Link
+										as={RouterNavLink}
+										to="/auth"
+										mx={4}
+										_hover={{ color: "green.800" }}
+										_activeLink={{ textDecoration: "underline" }}
+										onClick={() => setAuthScreen("signup")}
+									>
 										Sign up
 									</Link>
 								</>
@@ -57,10 +102,15 @@ const Header = () => {
 						<Flex align="center">
 							{["facebook", "twitterx", "instagram"].map((icon) => (
 								<Link
-									href={icon === "facebook" ? "https://web.facebook.com/?_rdc=1&_rdr" :
-										icon === "twitterx" ? "https://twitter.com/" : "https://www.instagram.com/"}
+									href={
+										icon === "facebook"
+											? "https://web.facebook.com/?_rdc=1&_rdr"
+											: icon === "twitterx"
+												? "https://twitter.com/"
+												: "https://www.instagram.com/"
+									}
 									target="_blank"
-									_hover={{ color: "gray.400" }}
+									_hover={{ color: "green.800" }}
 									mr={4}
 									key={icon}
 								>
@@ -73,7 +123,6 @@ const Header = () => {
 					</Flex>
 				</Container>
 			</Box>
-
 		</>
 	);
 };
