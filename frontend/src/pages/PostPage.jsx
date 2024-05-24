@@ -1,15 +1,15 @@
 import {
 	Avatar,
 	Box,
+	Button,
 	Divider,
 	Flex,
+	FormControl,
 	Heading,
 	Image,
+	Input,
 	Spinner,
 	Text,
-	Button,
-	FormControl,
-	Input,
 } from "@chakra-ui/react";
 import Actions from "../components/Actions";
 import { useEffect, useRef, useState } from "react";
@@ -21,8 +21,17 @@ import { formatDistanceToNow } from "date-fns";
 import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import postsAtom from "../atoms/postsAtom";
-import { Dot, Share, Timer, Trash2, Utensils } from "lucide-react";
+import { Dot, Timer, Trash2, Utensils } from "lucide-react";
 import parse from "html-react-parser";
+import { animateScroll as scroll } from "react-scroll";
+import {
+	FacebookShareButton,
+	TwitterShareButton,
+	WhatsappShareButton,
+	FacebookIcon,
+	TwitterIcon,
+	WhatsappIcon,
+} from "react-share";
 
 const PostPage = () => {
 	const { user, loading } = useGetUserProfile();
@@ -31,12 +40,12 @@ const PostPage = () => {
 	const { pid } = useParams();
 	const currentUser = useRecoilValue(userAtom);
 	const navigate = useNavigate();
+	const [showCommentInput, setShowCommentInput] = useState(false);
+	const [reply, setReply] = useState("");
+	const [isReplying, setIsReplying] = useState(false);
 
 	const currentPost = posts[0];
 	const commentsRef = useRef(null);
-	const [showCommentInput, setShowCommentInput] = useState(false); // New state for showing comment input
-	const [reply, setReply] = useState(""); // New state for reply text
-	const [isReplying, setIsReplying] = useState(false); // New state for reply loading
 
 	useEffect(() => {
 		const getPost = async () => {
@@ -76,27 +85,12 @@ const PostPage = () => {
 		}
 	};
 
-	if (!user && loading) {
-		return (
-			<Flex justifyContent={"center"}>
-				<Spinner size={"xl"} />
-			</Flex>
-		);
-	}
-
-	if (!currentPost) return null;
-	console.log("currentPost", currentPost);
-
-	const scrollToComments = () => {
-		commentsRef.current.scrollIntoView({ behavior: "smooth" });
-	};
-
 	const handleReply = async () => {
 		if (!user) return showToast("Error", "You must be logged in to reply to a post", "error");
 		if (isReplying) return;
 		setIsReplying(true);
 		try {
-			const res = await fetch("/api/posts/reply/" + currentPost._id, {
+			const res = await fetch(`/api/posts/reply/${currentPost._id}`, {
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",
@@ -123,11 +117,31 @@ const PostPage = () => {
 		}
 	};
 
+	if (!user && loading) {
+		return (
+			<Flex justifyContent={"center"}>
+				<Spinner size={"xl"} />
+			</Flex>
+		);
+	}
+
+	if (!currentPost) return null;
+	console.log("currentPost", currentPost);
+
+	const scrollToComments = () => {
+		scroll.scrollTo(commentsRef.current.offsetTop, {
+			duration: 500,
+			smooth: "easeInOutQuad",
+		});
+	};
+
+	const postUrl = window.location.href;
+	const postTitle = currentPost.recipeTitle;
+
 	return (
 		<>
-			<Flex py={"10"} maxWidth={"1440px"}>
+			<Flex py={"10"} gap={6}>
 				<Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>PostPage</Heading>
-				{/* User name & img*/}
 				<Flex w={"full"} alignItems={"center"} gap={4}>
 					<Avatar src={user.profilePic} size={"md"} />
 					<Flex flexDirection={"column"} gap={1}>
@@ -138,30 +152,35 @@ const PostPage = () => {
 							{formatDistanceToNow(new Date(currentPost.createdAt))} ago
 						</Text>
 					</Flex>
-
 					<Text fontSize={"sm"} display={"flex"} gap={3}>
 						<Timer />
 						{currentPost.cookingTime}
 					</Text>
-
 					<Dot />
-
 					<Text fontSize={"sm"} display={"flex"} gap={3}>
 						<Utensils />
 						{currentPost.recipeOrigin}
 					</Text>
 				</Flex>
-				{/* ---- User name & img ---- */}
-
 				<Flex gap={4} alignItems={"center"}>
-					<Share size={21} />
+					<Flex gap={2}>
+						<FacebookShareButton url={postUrl} quote={postTitle}>
+							<FacebookIcon size={24} round />
+						</FacebookShareButton>
+						<TwitterShareButton url={postUrl} title={postTitle}>
+							<TwitterIcon size={24} round />
+						</TwitterShareButton>
+						<WhatsappShareButton url={postUrl} title={postTitle} separator=":: ">
+							<WhatsappIcon size={24} round />
+						</WhatsappShareButton>
+					</Flex>
 					{currentUser?._id === user._id && (
 						<Trash2 size={20} cursor={"pointer"} onClick={handleDeletePost} />
 					)}
 				</Flex>
 			</Flex>
 
-			<Flex gap={6}>
+			<Flex gap={6} flexDirection="column">
 				<Flex gap={3} my={3} cursor={"pointer"}>
 					<Actions post={currentPost} setShowCommentInput={setShowCommentInput} scrollToComments={scrollToComments} />
 				</Flex>
@@ -173,7 +192,6 @@ const PostPage = () => {
 						overflow={"hidden"}
 						border={"1px solid"}
 						borderColor={"gray.light"}
-						shadow={"md"}
 					>
 						<Image src={currentPost.img} w={"full"} />
 					</Box>
@@ -190,24 +208,22 @@ const PostPage = () => {
 				</Text>
 			</Flex>
 
-			<Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }} pb={4} pt={10} ref={commentsRef}>
+			<Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }} py={4} ref={commentsRef}>
 				Comments
 			</Heading>
 			<Divider my={4} />
 
 			{showCommentInput && (
-				<Flex flexDirection="column" mt={4} p={2}  >
+				<Flex flexDirection="column" mt={4} p={4} border="1px" borderColor="gray.200" borderRadius="md">
 					<FormControl>
 						<Input
 							placeholder='Write a comment...'
 							value={reply}
 							onChange={(e) => setReply(e.target.value)}
-							borderColor="gray.300"
-							focusBorderColor="green.200"
 						/>
 					</FormControl>
 					<Flex mt={2} justifyContent="flex-end">
-						<Button size="sm" colorScheme="whatsapp" isLoading={isReplying} onClick={handleReply}>
+						<Button size="sm" colorScheme="blue" isLoading={isReplying} onClick={handleReply}>
 							Post Comment
 						</Button>
 					</Flex>

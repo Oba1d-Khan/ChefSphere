@@ -1,5 +1,8 @@
 import {
+	Button,
 	Flex,
+	FormControl,
+	Input,
 	Text,
 } from "@chakra-ui/react";
 import { useState } from "react";
@@ -46,6 +49,11 @@ const Actions = ({ post, setShowCommentInput, scrollToComments }) => {
 		}
 	};
 
+	const handleCommentClick = () => {
+		setShowCommentInput(true);
+		scrollToComments();
+	};
+
 	return (
 		<Flex flexDirection="column">
 			<Flex gap={3} my={2} mx={2} flexDirection='column' alignItems={"center"} onClick={(e) => e.preventDefault()}>
@@ -76,10 +84,7 @@ const Actions = ({ post, setShowCommentInput, scrollToComments }) => {
 					role='img'
 					viewBox='0 0 24 24'
 					width='20'
-					onClick={() => {
-						setShowCommentInput(true);
-						scrollToComments();
-					}}
+					onClick={handleCommentClick}
 				>
 					<title>Comment</title>
 					<path
@@ -97,4 +102,4 @@ const Actions = ({ post, setShowCommentInput, scrollToComments }) => {
 	);
 };
 
-export default Actions;
+export default Actions
