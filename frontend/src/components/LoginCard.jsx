@@ -12,6 +12,7 @@ import {
 	Text,
 	useColorModeValue,
 	Link,
+	Image,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
@@ -31,6 +32,7 @@ export default function LoginCard() {
 		password: "",
 	});
 	const showToast = useShowToast();
+
 	const handleLogin = async () => {
 		setLoading(true);
 		try {
@@ -54,76 +56,98 @@ export default function LoginCard() {
 			setLoading(false);
 		}
 	};
+
 	return (
 		<Flex align={"center"} justify={"center"}>
-			<Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+			<Stack spacing={8} mx={"auto"} maxW={"80vw"} py={20} px={6}>
 				<Stack align={"center"}>
-					<Heading fontSize={"4xl"} textAlign={"center"}>
-						Login
+					<Heading fontSize={"5xl"} textAlign={"center"} fontWeight={"semibold"} color={"black"} pb={20}>
+						Log In
 					</Heading>
 				</Stack>
-				<Box
-					rounded={"lg"}
-					bg={useColorModeValue("white", "gray.dark")}
-					boxShadow={"lg"}
-					p={8}
-					w={{
-						base: "full",
-						sm: "400px",
-					}}
-				>
-					<Stack spacing={4}>
-						<FormControl isRequired>
-							<FormLabel>Username</FormLabel>
-							<Input
-								type='text'
-								value={inputs.username}
-								onChange={(e) => setInputs((inputs) => ({ ...inputs, username: e.target.value }))}
-							/>
-						</FormControl>
-						<FormControl isRequired>
-							<FormLabel>Password</FormLabel>
-							<InputGroup>
+				<Stack direction={{ base: "column", md: "row" }} spacing={20} align={"center"} justify={"center"}>
+					<Box
+						borderRadius="4xl"
+					>
+						<Image
+							src="/public/chef_2.png"
+							alt="chef"
+							objectFit="cover"
+							maxW={{ md: "30vw" }}
+							borderRadius="2xl"
+						/>
+					</Box>
+
+					<Box
+						rounded={"lg"}
+						bg={useColorModeValue("white", "gray.700")}
+						boxShadow={"lg"}
+						p={8}
+						w={{ base: "full", sm: "400px" }}
+					>
+						<Stack spacing={4}>
+							<FormControl isRequired>
+								<FormLabel fontSize="xs" fontWeight="medium" textTransform="uppercase" color="gray.900">
+									Username
+								</FormLabel>
 								<Input
-									type={showPassword ? "text" : "password"}
-									value={inputs.password}
-									onChange={(e) => setInputs((inputs) => ({ ...inputs, password: e.target.value }))}
+									type='text'
+									value={inputs.username}
+									onChange={(e) => setInputs({ ...inputs, username: e.target.value })}
+									bg="white"
+									borderColor="gray.200"
+									focusBorderColor="blue.500"
 								/>
-								<InputRightElement h={"full"}>
-									<Button
-										variant={"ghost"}
-										onClick={() => setShowPassword((showPassword) => !showPassword)}
-									>
-										{showPassword ? <ViewIcon /> : <ViewOffIcon />}
-									</Button>
-								</InputRightElement>
-							</InputGroup>
-						</FormControl>
-						<Stack spacing={10} pt={2}>
-							<Button
-								loadingText='Logging in'
-								size='lg'
-								bg={useColorModeValue("gray.600", "gray.700")}
-								color={"white"}
-								_hover={{
-									bg: useColorModeValue("gray.700", "gray.800"),
-								}}
-								onClick={handleLogin}
-								isLoading={loading}
-							>
-								Login
-							</Button>
+							</FormControl>
+							<FormControl isRequired>
+								<FormLabel fontSize="xs" fontWeight="medium" textTransform="uppercase" color="gray.900">
+									Password
+								</FormLabel>
+								<InputGroup>
+									<Input
+										type={showPassword ? "text" : "password"}
+										value={inputs.password}
+										onChange={(e) => setInputs({ ...inputs, password: e.target.value })}
+										bg="white"
+										borderColor="gray.200"
+										focusBorderColor="blue.500"
+									/>
+									<InputRightElement h={"full"}>
+										<Button
+											variant={"ghost"}
+											onClick={() => setShowPassword(!showPassword)}
+										>
+											{showPassword ? <ViewIcon /> : <ViewOffIcon />}
+										</Button>
+									</InputRightElement>
+								</InputGroup>
+							</FormControl>
+							<Stack spacing={10} pt={2}>
+								<Button
+									loadingText='Logging in'
+									size='lg'
+									bg={useColorModeValue("black", "gray.700")}
+									color={"white"}
+									_hover={{
+										bg: useColorModeValue("blackAlpha.800", "gray.800"),
+									}}
+									onClick={handleLogin}
+									isLoading={loading}
+								>
+									Login
+								</Button>
+							</Stack>
+							<Stack pt={6}>
+								<Text align={"center"}>
+									Don't have an account?{" "}
+									<Link color={"green.400"}  fontWeight={"bold"} onClick={() => setAuthScreen("signup")}>
+										Sign up
+									</Link>
+								</Text>
+							</Stack>
 						</Stack>
-						<Stack pt={6}>
-							<Text align={"center"}>
-								Don&apos;t have an account?{" "}
-								<Link color={"blue.400"} onClick={() => setAuthScreen("signup")}>
-									Sign up
-								</Link>
-							</Text>
-						</Stack>
-					</Stack>
-				</Box>
+					</Box>
+				</Stack>
 			</Stack>
 		</Flex>
 	);
