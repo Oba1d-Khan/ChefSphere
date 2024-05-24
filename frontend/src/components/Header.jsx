@@ -14,10 +14,10 @@ const Header = () => {
 	return (
 
 		<>
-			<Box bg="white" color="black" p={4}>
+			<Box bg="white" color="black" p={4} borderRadius={"3xl"} my={"4"}>
 				<Container maxW="container.lg">
 					<Flex justify="space-between" align="center">
-						<Text fontSize="lg" fontWeight="semibold">
+						<Text fontSize="2xl"  fontFamily={"Lobster"}>
 							<Link as={RouterLink} to="/" src="/chefsphere_logo.svg"
 							// onClick={toggleColorMode}
 							>
@@ -65,7 +65,7 @@ const Header = () => {
 									key={icon}
 								>
 									<Box as="svg" fill="currentColor" viewBox="0 0 24 24" h={6} w={6}>
-										<image href={`/img/icons8-${icon}.svg`} width="24" height="24" />
+										<image href={`/public/icons8-${icon}.svg`} width="24" height="24" />
 									</Box>
 								</Link>
 							))}

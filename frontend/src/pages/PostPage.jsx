@@ -141,8 +141,7 @@ const PostPage = () => {
 	return (
 		<>
 			<Flex py={"10"} gap={6}>
-				<Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>PostPage</Heading>
-				<Flex w={"full"} alignItems={"center"} gap={4}>
+				<Flex  w={"full"} alignItems={"center"} gap={4}>
 					<Avatar src={user.profilePic} size={"md"} />
 					<Flex flexDirection={"column"} gap={1}>
 						<Text fontSize={"sm"} fontWeight={"bold"}>
@@ -180,7 +179,7 @@ const PostPage = () => {
 				</Flex>
 			</Flex>
 
-			<Flex gap={6} flexDirection="column">
+			<Flex gap={6}>
 				<Flex gap={3} my={3} cursor={"pointer"}>
 					<Actions post={currentPost} setShowCommentInput={setShowCommentInput} scrollToComments={scrollToComments} />
 				</Flex>
@@ -223,7 +222,7 @@ const PostPage = () => {
 						/>
 					</FormControl>
 					<Flex mt={2} justifyContent="flex-end">
-						<Button size="sm" colorScheme="blue" isLoading={isReplying} onClick={handleReply}>
+						<Button size="sm" colorScheme="whatsapp" isLoading={isReplying} onClick={handleReply}>
 							Post Comment
 						</Button>
 					</Flex>
