@@ -4,6 +4,7 @@ import { useRecoilState } from "recoil";
 import useShowToast from "../hooks/useShowToast";
 import postsAtom from "../atoms/postsAtom";
 import FeaturedPost from "../components/FeaturedPost";
+import HeroSection from "../components/Hero";
 
 const HomePage = () => {
 	const [posts, setPosts] = useRecoilState(postsAtom);
@@ -68,38 +69,7 @@ const HomePage = () => {
 
 	return (
 		<Box>
-			{/* Hero Section */}
-			<Box bg="gray.800" color="white">
-				<Container maxW="container.lg" py={12}>
-					<Flex align="center">
-						<Box w="50%" pr={8}>
-							<Heading as="h1" size="2xl" mb={4}>
-								Delicious Feast for Family
-							</Heading>
-							<Text fontSize="lg" mb={6}>
-								Lorem ipsum, dolor sit amet consectetur adipisicing elit. Commodi
-								provident itaque pariatur eaque ipsam suscipit. Soluta aliquam quaerat
-								inventore fugit praesentium? Delectus, magni cum nostrum eos
-								voluptatibus facilis esse harum libero consequuntur.
-							</Text>
-							<Button
-								bg="blue.500"
-								_hover={{ bg: "blue.700" }}
-								color="white"
-								fontWeight="bold"
-								py={2}
-								px={4}
-								rounded="md"
-							>
-								View Recipes
-							</Button>
-						</Box>
-						<Box w="50%">
-							<Image src="/public/cover.jpg" alt="ChefSphere Image" w="full" borderRadius="lg" />
-						</Box>
-					</Flex>
-				</Container>
-			</Box>
+			<HeroSection />
 
 			{/* Search Section */}
 			<Box maxW="container.md" mx="auto" py={4}>
