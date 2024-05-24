@@ -1,10 +1,11 @@
-import { Box, Container, Flex, Spinner, Heading, Text, Button, Grid, Image, Input } from "@chakra-ui/react";
+import { Box, Container, Flex, Spinner, Heading, Text, Button, Grid, Image, Input, Icon } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import useShowToast from "../hooks/useShowToast";
 import postsAtom from "../atoms/postsAtom";
 import FeaturedPost from "../components/FeaturedPost";
 import HeroSection from "../components/Hero";
+import { SearchX } from "lucide-react";
 
 const HomePage = () => {
 	const [posts, setPosts] = useRecoilState(postsAtom);
@@ -72,46 +73,49 @@ const HomePage = () => {
 			<HeroSection />
 
 			{/* Search Section */}
-			<Box maxW="container.md" mx="auto" py={4}>
-				<form onSubmit={handleSearch}>
-					<Flex>
+			<Box maxW="1400px" mx="auto" py={4}>
+				<form onSubmit={handleSearch} >
+					<Flex maxW="600px" mx={"auto"}>
 						<Input
 							type="text"
 							value={searchQuery}
 							onChange={(e) => setSearchQuery(e.target.value)}
-							bg="gray.100"
-							rounded="md"
+							bg="whitesmoke"
+							rounded="full"
 							py={2}
-							px={4}
-							focusBorderColor="blue.500"
-							placeholder="Search..."
+							px={6}
+							focusBorderColor="green.300"
+							placeholder="Search Recipe..."
 							w="full"
+							borderColor={"green.200"}
 						/>
 						<Button
 							onClick={handleSearch}
-							bg="black"
+							bg="green.400"
 							color="white"
-							fontWeight="bold"
+							fontWeight="semibold"
 							py={2}
-							px={4}
+							px={6}
 							ml={2}
-							rounded="md"
-							_hover={{ bg: "gray.500" }}
+							rounded="full"
+							_hover={{ bg: "green.300" }}
 						>
 							Search
 						</Button>
 						<Button
 							onClick={clearSearch}
-							bg="red.500"
+							bg="red.200"
 							color="white"
 							fontWeight="bold"
 							py={2}
 							px={4}
 							ml={2}
-							rounded="md"
-							_hover={{ bg: "red.700" }}
+							rounded="full"
+							_hover={{ bg: "red.300" }}
 						>
-							Clear
+							<Icon as={SearchX} w={5} h={5} color={"blackAlpha.800"} fill={'blackAlpha.200'} />
+
+
 						</Button>
 					</Flex>
 				</form>
@@ -135,7 +139,7 @@ const HomePage = () => {
 						<Heading as="h2" size="lg" mb={4}>
 							Searched Results
 						</Heading>
-						<Grid templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }} gap={6}>
+						<Grid templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }} mx={"auto"} gap={4} justifyItems={"between"}>
 							{searchedPosts.map((post) => (
 								<FeaturedPost key={post._id} post={post} postedBy={post.postedBy} />
 							))}
@@ -185,7 +189,7 @@ const HomePage = () => {
 						</Heading>
 					)}
 
-					<Grid templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }} gap={6}>
+					<Grid templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }} gap={4}>
 						{posts.map((post) => (
 							<FeaturedPost key={post._id} post={post} postedBy={post.postedBy} />
 						))}
