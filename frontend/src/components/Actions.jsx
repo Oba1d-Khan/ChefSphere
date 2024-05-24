@@ -1,18 +1,6 @@
 import {
-	// Box,
-	Button,
 	Flex,
-	FormControl,
-	Input,
-	Modal,
-	ModalBody,
-	ModalCloseButton,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	ModalOverlay,
 	Text,
-	useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -20,16 +8,12 @@ import userAtom from "../atoms/userAtom";
 import useShowToast from "../hooks/useShowToast";
 import postsAtom from "../atoms/postsAtom";
 
-const Actions = ({ post }) => {
+const Actions = ({ post, setShowCommentInput, scrollToComments }) => {
 	const user = useRecoilValue(userAtom);
 	const [liked, setLiked] = useState(post.likes.includes(user?._id));
 	const [posts, setPosts] = useRecoilState(postsAtom);
 	const [isLiking, setIsLiking] = useState(false);
-	const [isReplying, setIsReplying] = useState(false);
-	const [reply, setReply] = useState("");
-
 	const showToast = useShowToast();
-	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const handleLikeAndUnlike = async () => {
 		if (!user) return showToast("Error", "You must be logged in to like a post", "error");
@@ -45,26 +29,15 @@ const Actions = ({ post }) => {
 			const data = await res.json();
 			if (data.error) return showToast("Error", data.error, "error");
 
-			if (!liked) {
-				// add the id of the current user to post.likes array
-				const updatedPosts = posts.map((p) => {
-					if (p._id === post._id) {
-						return { ...p, likes: [...p.likes, user._id] };
-					}
-					return p;
-				});
-				setPosts(updatedPosts);
-			} else {
-				// remove the id of the current user from post.likes array
-				const updatedPosts = posts.map((p) => {
-					if (p._id === post._id) {
-						return { ...p, likes: p.likes.filter((id) => id !== user._id) };
-					}
-					return p;
-				});
-				setPosts(updatedPosts);
-			}
-
+			const updatedPosts = posts.map((p) => {
+				if (p._id === post._id) {
+					return liked
+						? { ...p, likes: p.likes.filter((id) => id !== user._id) }
+						: { ...p, likes: [...p.likes, user._id] };
+				}
+				return p;
+			});
+			setPosts(updatedPosts);
 			setLiked(!liked);
 		} catch (error) {
 			showToast("Error", error.message, "error");
@@ -73,40 +46,8 @@ const Actions = ({ post }) => {
 		}
 	};
 
-	const handleReply = async () => {
-		if (!user) return showToast("Error", "You must be logged in to reply to a post", "error");
-		if (isReplying) return;
-		setIsReplying(true);
-		try {
-			const res = await fetch("/api/posts/reply/" + post._id, {
-				method: "PUT",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ text: reply }),
-			});
-			const data = await res.json();
-			if (data.error) return showToast("Error", data.error, "error");
-
-			const updatedPosts = posts.map((p) => {
-				if (p._id === post._id) {
-					return { ...p, replies: [...p.replies, data] };
-				}
-				return p;
-			});
-			setPosts(updatedPosts);
-			showToast("Success", "Reply posted successfully", "success");
-			onClose();
-			setReply("");
-		} catch (error) {
-			showToast("Error", error.message, "error");
-		} finally {
-			setIsReplying(false);
-		}
-	};
-
 	return (
-		<Flex >
+		<Flex flexDirection="column">
 			<Flex gap={3} my={2} mx={2} flexDirection='column' alignItems={"center"} onClick={(e) => e.preventDefault()}>
 				<svg
 					aria-label='Like'
@@ -126,7 +67,6 @@ const Actions = ({ post }) => {
 				</svg>
 				<Text color={"gray.light"} fontSize='sm' fontWeight={"semibold"}>
 					{post.likes.length}
-
 				</Text>
 				<svg
 					aria-label='Comment'
@@ -136,7 +76,10 @@ const Actions = ({ post }) => {
 					role='img'
 					viewBox='0 0 24 24'
 					width='20'
-					onClick={onOpen}
+					onClick={() => {
+						setShowCommentInput(true);
+						scrollToComments();
+					}}
 				>
 					<title>Comment</title>
 					<path
@@ -146,39 +89,12 @@ const Actions = ({ post }) => {
 						strokeWidth='2'
 					></path>
 				</svg>
-
 				<Text color={"gray.light"} fontSize='sm' fontWeight={"semibold"}>
 					{post.replies.length}
 				</Text>
 			</Flex>
-
-
-
-			<Modal isOpen={isOpen} onClose={onClose}>
-				<ModalOverlay />
-				<ModalContent>
-					<ModalHeader></ModalHeader>
-					<ModalCloseButton />
-					<ModalBody pb={6}>
-						<FormControl>
-							<Input
-								placeholder='Reply goes here..'
-								value={reply}
-								onChange={(e) => setReply(e.target.value)}
-							/>
-						</FormControl>
-					</ModalBody>
-
-					<ModalFooter>
-						<Button colorScheme='blue' size={"sm"} mr={3} isLoading={isReplying} onClick={handleReply}>
-							Reply
-						</Button>
-					</ModalFooter>
-				</ModalContent>
-			</Modal>
 		</Flex>
 	);
 };
 
 export default Actions;
-
