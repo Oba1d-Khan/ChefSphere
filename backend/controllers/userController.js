@@ -239,6 +239,39 @@ const freezeAccount = async (req, res) => {
 	}
 };
 
+const addFavorite = async (req, res) => {
+	try {
+		const user = await User.findById(req.user._id);
+		const post = await Post.findById(req.params.postId);
+
+		if (!user || !post) {
+			return res.status(404).json({ message: 'User or Post not found' });
+		}
+
+		user.favorites.push(post._id);
+		await user.save();
+
+		res.status(200).json({ message: 'Post added to favorites', favorites: user.favorites });
+	} catch (error) {
+		res.status(500).json({ message: 'Server error', error });
+	}
+};
+const removeFavorite = async (req, res) => {
+	try {
+		const user = await User.findById(req.user._id);
+
+		if (!user) {
+			return res.status(404).json({ message: 'User not found' });
+		}
+
+		user.favorites = user.favorites.filter(fav => fav.toString() !== req.params.postId);
+		await user.save();
+
+		res.status(200).json({ message: 'Post removed from favorites', favorites: user.favorites });
+	} catch (error) {
+		res.status(500).json({ message: 'Server error', error });
+	}
+};
 export {
 	signupUser,
 	loginUser,
@@ -248,4 +281,6 @@ export {
 	getUserProfile,
 	getSuggestedUsers,
 	freezeAccount,
+	addFavorite,
+	removeFavorite
 };

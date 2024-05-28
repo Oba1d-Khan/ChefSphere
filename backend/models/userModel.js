@@ -41,6 +41,10 @@ const userSchema = mongoose.Schema(
 			type: Boolean,
 			default: false,
 		},
+		favorites: [{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Posts'
+		}]
 	},
 	{
 		timestamps: true,

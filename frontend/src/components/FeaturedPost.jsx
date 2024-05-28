@@ -1,23 +1,19 @@
-import { Avatar } from "@chakra-ui/avatar";
+// src/components/FeaturedPost.jsx
+import { useEffect, useState } from "react";
 import { Image } from "@chakra-ui/image";
 import { Box, Flex, Text } from "@chakra-ui/layout";
-import { Link, useNavigate } from "react-router-dom";
-import Actions from "./Actions";
-import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import useShowToast from "../hooks/useShowToast";
-import { formatDistanceToNow } from "date-fns";
-import { useRecoilState, useRecoilValue } from "recoil";
-import userAtom from "../atoms/userAtom";
+import { useRecoilState } from "recoil";
 import postsAtom from "../atoms/postsAtom";
-import { Timer, Trash2Icon, Utensils } from "lucide-react";
-import { Icon, useColorModeValue } from "@chakra-ui/react";
+import { Timer, Utensils } from "lucide-react";
+import { Icon, useColorModeValue, Button } from "@chakra-ui/react";
+import axios from "axios";
 
 const FeaturedPost = ({ post, postedBy }) => {
   const [user, setUser] = useState(null);
   const showToast = useShowToast();
-  const currentUser = useRecoilValue(userAtom);
   const [posts, setPosts] = useRecoilState(postsAtom);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const getUser = async () => {
@@ -37,6 +33,26 @@ const FeaturedPost = ({ post, postedBy }) => {
 
     getUser();
   }, [postedBy, showToast]);
+
+  const handleAddToFavorites = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post(`/api/users/favorites/${post._id}`);
+      showToast("Success", "Recipe added to favorites", "success");
+    } catch (error) {
+      showToast("Error", error.message, "error");
+    }
+  };
+
+  const handleRemoveFromFavorites = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.delete(`/api/users/favorites/${post._id}`);
+      showToast("Success", "Recipe removed from favorites", "success");
+    } catch (error) {
+      showToast("Error", error.message, "error");
+    }
+  };
 
   const handleDeletePost = async (e) => {
     try {
@@ -107,6 +123,17 @@ const FeaturedPost = ({ post, postedBy }) => {
             <Icon as={Timer} w={5} h={5} mr={1} />
             <Text fontSize="md">{post.cookingTime}</Text>
           </Flex>
+        </Flex>
+        <Flex gap={3} mt={3} flexDirection={'column'}>
+          <Button colorScheme="blue" onClick={handleAddToFavorites}>
+            Add to Favorites
+          </Button>
+          <Button colorScheme="red" onClick={handleRemoveFromFavorites}>
+            Remove from Favorites
+          </Button>
+          <Button colorScheme="red" onClick={handleDeletePost}>
+            Delete Post
+          </Button>
         </Flex>
       </Flex>
     </Link>
