@@ -3,6 +3,10 @@ import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import { Link as RouterLink } from "react-router-dom";
 import Favorites from "../components/Favourites";
+import { Tab, TabList, TabPanel, TabPanels, Tabs, Box } from "@chakra-ui/react";
+import FollowersList from "./FollowersList";
+import FollowingList from "./FollowingsList";
+import Favourites from "../components/Favourites";
 
 const UserHeader = ({ user }) => {
   const currentUser = useRecoilValue(userAtom); // logged in user
@@ -45,6 +49,27 @@ const UserHeader = ({ user }) => {
           <Favorites userId={user._id} />
         </div>
       </div>
+      <Box>
+        {/* Existing profile header details */}
+        <Tabs variant="soft-rounded" colorScheme="green">
+          <TabList>
+            <Tab>Followers</Tab>
+            <Tab>Following</Tab>
+            <Tab>Favorites</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              <FollowersList />
+            </TabPanel>
+            <TabPanel>
+              <FollowingList />
+            </TabPanel>
+            <TabPanel>
+              <Favourites />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </Box>
     </>
   );
 };

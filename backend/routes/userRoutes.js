@@ -10,7 +10,7 @@ import {
 	freezeAccount,
 	addFavorite,
 	removeFavorite,
-	getFavorites
+	getFavorites, getFollowers, getFollowing
 } from "../controllers/userController.js";
 import protectRoute from "../middlewares/protectRoute.js";
 
@@ -27,6 +27,7 @@ router.put("/freeze", protectRoute, freezeAccount);
 router.post('/favorites/:postId', protectRoute, addFavorite);
 router.delete('/favorites/:postId', protectRoute, removeFavorite);
 router.get('/favorites/:userId', protectRoute, getFavorites);
-
+router.get('/followers/:userId', protectRoute, getFollowers);
+router.get('/following/:userId', protectRoute, getFollowing);
 
 export default router;

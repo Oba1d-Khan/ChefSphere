@@ -293,6 +293,23 @@ const getFavorites = async (req, res) => {
 	}
 };
 
+ const getFollowers = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId).populate('followers', 'name username profilePic');
+        res.status(200).json(user.followers);
+    } catch (error) {
+        res.status(500).json({ error: "Error fetching followers" });
+    }
+};
+
+ const getFollowing = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId).populate('following', 'name username profilePic');
+        res.status(200).json(user.following);
+    } catch (error) {
+        res.status(500).json({ error: "Error fetching following" });
+    }
+};
 export {
 	signupUser,
 	loginUser,
@@ -304,5 +321,7 @@ export {
 	freezeAccount,
 	addFavorite,
 	removeFavorite,
-	getFavorites
+	getFavorites,
+	getFollowers,
+	getFollowing
 };
