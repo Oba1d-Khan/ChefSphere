@@ -58,7 +58,7 @@ export default function SignupCard() {
         return;
       }
 
-      localStorage.setItem("user-threads", JSON.stringify(data));
+      localStorage.setItem("user-posts", JSON.stringify(data));
       setUser(data);
     } catch (error) {
       showToast("Error", error, "error");
@@ -85,8 +85,8 @@ export default function SignupCard() {
         align="center"
         gap="40"
       >
-        <Box borderRadius="2xl" bgGradient="linear(to-b, green.100 10%, green.300)"        mb={"10"}
->
+        <Box borderRadius="2xl" bgGradient="linear(to-b, green.100 10%, green.300)" mb={"10"}
+        >
           <Image
             src="/public/chef_1.png"
             alt="chef"

@@ -21,7 +21,7 @@ const useLogout = () => {
 				return;
 			}
 
-			localStorage.removeItem("user-threads");
+			localStorage.removeItem("user-posts");
 			setUser(null);
 		} catch (error) {
 			showToast("Error", error, "error");
