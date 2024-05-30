@@ -9,7 +9,15 @@ import {
 	useColorModeValue,
 	Avatar,
 	Center,
+	IconButton,
+	AlertDialog,
+	AlertDialogBody,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogContent,
+	AlertDialogOverlay,
 } from "@chakra-ui/react";
+import { CloseIcon } from "@chakra-ui/icons";
 import { useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
@@ -25,12 +33,18 @@ export default function UpdateProfilePage() {
 		bio: user.bio,
 		password: "",
 	});
+	const initialInputs = useRef(inputs); // Save the initial inputs
+
 	const fileRef = useRef(null);
 	const [updating, setUpdating] = useState(false);
 
 	const showToast = useShowToast();
 
 	const { handleImageChange, imgUrl } = usePreviewImg();
+
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const onCloseDialog = () => setIsDialogOpen(false);
+	const cancelRef = useRef();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -51,13 +65,24 @@ export default function UpdateProfilePage() {
 			}
 			showToast("Success", "Profile updated successfully", "success");
 			setUser(data);
-			localStorage.setItem("user-threads", JSON.stringify(data));
+			localStorage.setItem("user-posts", JSON.stringify(data));
+			initialInputs.current = { ...inputs, profilePic: imgUrl };
 		} catch (error) {
 			showToast("Error", error, "error");
 		} finally {
 			setUpdating(false);
 		}
 	};
+
+	const handleDiscardChanges = () => {
+		setInputs(initialInputs.current);
+		setIsDialogOpen(false);
+	};
+
+	const handleCancel = () => {
+		setIsDialogOpen(false);
+	};
+
 	return (
 		<form onSubmit={handleSubmit}>
 			<Flex align={"center"} justify={"center"} my={6}>
@@ -70,9 +95,17 @@ export default function UpdateProfilePage() {
 					boxShadow={"lg"}
 					p={6}
 				>
-					<Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>
-						User Profile Edit
-					</Heading>
+					<Flex justify={"space-between"} align={"center"}>
+						<Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>
+							User Profile Edit
+						</Heading>
+						<IconButton
+							icon={<CloseIcon />}
+							onClick={() => setIsDialogOpen(true)}
+							variant="ghost"
+							aria-label="Close"
+						/>
+					</Flex>
 					<FormControl id='userName'>
 						<Stack direction={["column", "row"]} spacing={6}>
 							<Center>
@@ -144,6 +177,7 @@ export default function UpdateProfilePage() {
 							_hover={{
 								bg: "gray.500",
 							}}
+							onClick={() => setIsDialogOpen(true)}
 						>
 							Cancel
 						</Button>
@@ -162,6 +196,30 @@ export default function UpdateProfilePage() {
 					</Stack>
 				</Stack>
 			</Flex>
+			<AlertDialog
+				isOpen={isDialogOpen}
+				leastDestructiveRef={cancelRef}
+				onClose={onCloseDialog}
+			>
+				<AlertDialogOverlay>
+					<AlertDialogContent>
+						<AlertDialogHeader fontSize="lg" fontWeight="bold">
+							Discard Changes
+						</AlertDialogHeader>
+						<AlertDialogBody>
+							Are you sure you want to discard your changes? All unsaved data will be lost.
+						</AlertDialogBody>
+						<AlertDialogFooter>
+							<Button ref={cancelRef} onClick={handleCancel}>
+								Cancel
+							</Button>
+							<Button colorScheme="red" onClick={handleDiscardChanges} ml={3}>
+								Discard
+							</Button>
+						</AlertDialogFooter>
+					</AlertDialogContent>
+				</AlertDialogOverlay>
+			</AlertDialog>
 		</form>
 	);
 }
