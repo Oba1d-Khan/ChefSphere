@@ -43,7 +43,7 @@ const userSchema = mongoose.Schema(
 		},
 		favorites: [{
 			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Posts'
+			ref: 'Post'
 		}]
 	},
 	{

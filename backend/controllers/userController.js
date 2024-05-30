@@ -272,6 +272,27 @@ const removeFavorite = async (req, res) => {
 		res.status(500).json({ message: 'Server error', error });
 	}
 };
+const getFavorites = async (req, res) => {
+	try {
+		console.log("Fetching favorites for user ID:", req.params.userId);
+
+		const user = await User.findById(req.params.userId).populate('favorites');
+
+		if (!user) {
+			console.log("User not found");
+			return res.status(404).json({ error: 'User not found' });
+		}
+
+		console.log("User found:", user);
+		console.log("Favorites:", user.favorites);
+
+		res.status(200).json({ favorites: user.favorites });
+	} catch (error) {
+		console.error("Error fetching favorites:", error);
+		res.status(500).json({ error: 'Server error' });
+	}
+};
+
 export {
 	signupUser,
 	loginUser,
@@ -282,5 +303,6 @@ export {
 	getSuggestedUsers,
 	freezeAccount,
 	addFavorite,
-	removeFavorite
+	removeFavorite,
+	getFavorites
 };

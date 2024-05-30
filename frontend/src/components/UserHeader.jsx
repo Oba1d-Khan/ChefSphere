@@ -1,4 +1,3 @@
-// src/components/UserHeader.jsx
 import { Link } from "@chakra-ui/layout";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
