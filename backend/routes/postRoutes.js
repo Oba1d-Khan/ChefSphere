@@ -7,7 +7,8 @@ import {
 	replyToPost,
 	getFeedPosts,
 	getUserPosts,
-	searchPosts
+	searchPosts,
+	suggestRecipes
 } from "../controllers/postController.js";
 import protectRoute from "../middlewares/protectRoute.js";
 
@@ -21,5 +22,6 @@ router.post("/create", protectRoute, createPost);
 router.delete("/:id", protectRoute, deletePost);
 router.put("/like/:id", protectRoute, likeUnlikePost);
 router.put("/reply/:id", protectRoute, replyToPost);
+router.post("/suggest", protectRoute, suggestRecipes);
 
 export default router;

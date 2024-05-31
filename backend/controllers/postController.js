@@ -1,6 +1,7 @@
 import Post from "../models/postModel.js";
 import User from "../models/userModel.js";
 import { v2 as cloudinary } from "cloudinary";
+import axios from "axios";
 
 const createPost = async (req, res) => {
 	try {
@@ -192,4 +193,40 @@ const getAllRecipes = async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 };
-export { createPost, getPost, deletePost, likeUnlikePost, replyToPost, getFeedPosts, getUserPosts, searchPosts, getAllRecipes };
+
+
+const suggestRecipes = async (req, res) => {
+	const { ingredients, dietaryPreferences } = req.body;
+	const appId = process.env.EDAMAM_APP_ID;
+	const appKey = process.env.EDAMAM_APP_KEY;
+
+	console.log('Ingredients:', ingredients);
+	console.log('Dietary Preferences:', dietaryPreferences);
+
+	if (!ingredients || ingredients.length === 0) {
+		return res.status(400).json({ error: "Ingredients are required" });
+	}
+
+	try {
+		const params = {
+			q: ingredients.join(","),
+			app_id: appId,
+			app_key: appKey
+		};
+
+		if (dietaryPreferences && dietaryPreferences.length > 0) {
+			params.health = dietaryPreferences.join(",");
+		}
+
+		const response = await axios.get('https://api.edamam.com/search', { params });
+
+		const recipes = response.data.hits.map(hit => hit.recipe);
+		res.json(recipes);
+	} catch (error) {
+		console.error('Error fetching recipes:', error.message);
+		res.status(500).json({ error: "Failed to fetch recipes" });
+	}
+}
+
+
+export { createPost, getPost, deletePost, likeUnlikePost, replyToPost, getFeedPosts, getUserPosts, searchPosts, getAllRecipes, suggestRecipes };

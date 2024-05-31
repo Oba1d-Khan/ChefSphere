@@ -6,6 +6,7 @@ import postsAtom from "../atoms/postsAtom";
 import FeaturedPost from "../components/FeaturedPost";
 import HeroSection from "../components/Hero";
 import { SearchX } from "lucide-react";
+import RecipeSuggester from "../components/RecipeSuggester";
 
 const HomePage = () => {
 	const [posts, setPosts] = useRecoilState(postsAtom);
@@ -171,6 +172,10 @@ const HomePage = () => {
 						))}
 					</Grid>
 				</Box>
+
+				<Container maxW="container.lg" py={8}>
+					<RecipeSuggester />
+				</Container>
 
 				{/* Recipes Section */}
 				<Box py={8}>
