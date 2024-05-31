@@ -7,16 +7,14 @@ import {
     Text,
     Grid,
     GridItem,
-    useColorModeValue,
     Container,
-    Image
 } from "@chakra-ui/react";
 import { useState } from "react";
 import useShowToast from "../hooks/useShowToast";
+import RecipeCard from './RecipeCard';
 
 const RecipeSuggester = () => {
     const [ingredients, setIngredients] = useState("");
-    const [dietaryPreferences, setDietaryPreferences] = useState("");
     const [loading, setLoading] = useState(false);
     const [suggestedRecipes, setSuggestedRecipes] = useState([]);
     const showToast = useShowToast();
@@ -32,8 +30,7 @@ const RecipeSuggester = () => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    ingredients: ingredients.split(",").map(ingredient => ingredient.trim()),
-                    dietaryPreferences: dietaryPreferences ? dietaryPreferences.split(",").map(preference => preference.trim()) : [],
+                    ingredients: ingredients.split(",").map(ingredient => ingredient.trim())
                 }),
             });
 
@@ -73,20 +70,6 @@ const RecipeSuggester = () => {
                             w="full"
                             borderColor={"green.200"}
                         />
-                        <Input
-                            type="text"
-                            value={dietaryPreferences}
-                            onChange={(e) => setDietaryPreferences(e.target.value)}
-                            bg="whitesmoke"
-                            rounded="full"
-                            py={2}
-                            px={6}
-                            focusBorderColor="green.300"
-                            placeholder="Enter dietary preferences (comma separated)..."
-                            w="full"
-                            borderColor={"green.200"}
-                            ml={2}
-                        />
                         <Button
                             type="submit"
                             bg="green.400"
@@ -118,34 +101,9 @@ const RecipeSuggester = () => {
                 )}
 
                 <Grid templateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap={6} mt={6}>
-                    {suggestedRecipes.map((recipe, index) => (
-                        <GridItem key={index}>
-                            <Box
-                                p={4}
-                                borderWidth="1px"
-                                borderRadius="lg"
-                                overflow="hidden"
-                                bg={useColorModeValue("white", "gray.700")}
-                            >
-                                {recipe.image && (
-                                    <Image
-                                        src={recipe.image}
-                                        alt={recipe.label}
-                                        objectFit="cover"
-                                        borderRadius="lg"
-                                        mb={4}
-                                    />
-                                )}
-                                <Text fontWeight="bold" mb={2}>
-                                    {recipe.label}
-                                </Text>
-                                <Text mb={2}>Calories: {Math.round(recipe.calories)}</Text>
-                                <Text mb={2}>Diet Labels: {recipe.dietLabels.join(", ")}</Text>
-                                <Text mb={2}>Health Labels: {recipe.healthLabels.join(", ")}</Text>
-                                <Button as="a" href={recipe.url} target="_blank" colorScheme="teal">
-                                    View Recipe
-                                </Button>
-                            </Box>
+                    {suggestedRecipes.map((recipe) => (
+                        <GridItem key={recipe._id}>
+                            <RecipeCard post={recipe} postedBy={recipe.postedBy} />
                         </GridItem>
                     ))}
                 </Grid>

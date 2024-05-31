@@ -17,6 +17,8 @@ import { useRecoilState } from "recoil";
 import postsAtom from "../atoms/postsAtom";
 import FeaturedPost from "../components/FeaturedPost";
 import { SearchX } from "lucide-react";
+import RecipeSuggester from "../components/RecipeSuggester";
+import RecipeCard from "../components/RecipeCard";
 
 const HomePage = () => {
     const [posts, setPosts] = useRecoilState(postsAtom);
@@ -79,53 +81,9 @@ const HomePage = () => {
 
     return (
         <Box>
-            <Box maxW="1400px" mx="auto" py={4}>
-                <form onSubmit={handleSearch} >
-                    <Flex maxW="600px" mx={"auto"}>
-                        <Input
-                            type="text"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            bg="whitesmoke"
-                            rounded="full"
-                            py={2}
-                            px={6}
-                            focusBorderColor="green.300"
-                            placeholder="Search Recipe..."
-                            w="full"
-                            borderColor={"green.200"}
-                        />
-                        <Button
-                            onClick={handleSearch}
-                            bg="green.400"
-                            color="white"
-                            fontWeight="semibold"
-                            py={2}
-                            px={6}
-                            ml={2}
-                            rounded="full"
-                            _hover={{ bg: "green.300" }}
-                        >
-                            Search
-                        </Button>
-                        <Button
-                            onClick={clearSearch}
-                            bg="red.200"
-                            color="white"
-                            fontWeight="bold"
-                            py={2}
-                            px={4}
-                            ml={2}
-                            rounded="full"
-                            _hover={{ bg: "red.300" }}
-                        >
-                            <Icon as={SearchX} w={5} h={5} color={"blackAlpha.800"} fill={'blackAlpha.200'} />
-
-
-                        </Button>
-                    </Flex>
-                </form>
-            </Box>
+            <Container maxW="container.lg" py={8}>
+                <RecipeSuggester />
+            </Container>
 
             <Container maxW="container.lg">
                 {loading && searchQuery.length > 0 && searchedPosts.length === 0 && (
@@ -170,7 +128,7 @@ const HomePage = () => {
                 <Grid templateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap={6} mt={6}>
                     {posts.map((post) => (
                         <GridItem key={post._id}>
-                            <FeaturedPost post={post} postedBy={post.postedBy} />
+                            <RecipeCard post={post} postedBy={post.postedBy} />
                         </GridItem>
                     ))}
                 </Grid>

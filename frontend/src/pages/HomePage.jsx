@@ -7,6 +7,7 @@ import FeaturedPost from "../components/FeaturedPost";
 import HeroSection from "../components/Hero";
 import { SearchX } from "lucide-react";
 import RecipeSuggester from "../components/RecipeSuggester";
+import RecipeCard from "../components/RecipeCard";
 
 const HomePage = () => {
 	const [posts, setPosts] = useRecoilState(postsAtom);
@@ -173,9 +174,6 @@ const HomePage = () => {
 					</Grid>
 				</Box>
 
-				<Container maxW="container.lg" py={8}>
-					<RecipeSuggester />
-				</Container>
 
 				{/* Recipes Section */}
 				<Box py={8}>
@@ -194,9 +192,9 @@ const HomePage = () => {
 						</Heading>
 					)}
 
-					<Grid templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }} gap={4}>
+					<Grid templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }} gap={4}>
 						{posts.map((post) => (
-							<FeaturedPost key={post._id} post={post} postedBy={post.postedBy} />
+							<RecipeCard key={post._id} post={post} postedBy={post.postedBy} />
 						))}
 					</Grid>
 				</Box>
