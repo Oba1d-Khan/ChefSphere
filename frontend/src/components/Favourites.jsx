@@ -1,16 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Grid, GridItem, IconButton, Collapse } from '@chakra-ui/react';
-import { BookMarked } from 'lucide-react';
+import { Grid, GridItem, Collapse } from '@chakra-ui/react';
 import RecipeCard from './RecipeCard';
 import axios from 'axios';
+
 const Favourites = ({ userId }) => {
     const [favorites, setFavorites] = useState([]);
     const [error, setError] = useState(null);
-    const [showFavorites, setShowFavorites] = useState(false);
-
-    const toggleFavorites = () => {
-        setShowFavorites(!showFavorites);
-    };
 
     useEffect(() => {
         const fetchFavorites = async () => {
@@ -31,19 +26,10 @@ const Favourites = ({ userId }) => {
     }
 
     return (
-        <div>
-            <h2>
-                Your Favorite Recipes{' '}
-                <IconButton
-                    icon={<BookMarked />
-                    }
-                    aria-label="Toggle favorites"
-                    onClick={toggleFavorites}
-                />
-            </h2>
-            <Collapse in={showFavorites}>
+        <div >
+            <Collapse in={true}>
                 <Grid
-                    templateColumns="repeat(auto-fill, minmax(250px, 1fr))"
+                    templateColumns="repeat(auto-fill, minmax(300px, 1fr))"
                     gap={6}
                     justifyItems="center"
                 >
