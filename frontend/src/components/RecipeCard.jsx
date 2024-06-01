@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Image, Text, Flex, Icon, useColorModeValue, Button, color } from '@chakra-ui/react';
-import { Timer, Utensils, Heart, HeartOff, BookmarkPlus, BookmarkCheck } from 'lucide-react';
+import { Box, Image, Text, Flex, Icon, useColorModeValue } from '@chakra-ui/react';
+import { Timer, Utensils, BookmarkPlus, BookmarkCheck } from 'lucide-react';
 import axios from 'axios';
 import useShowToast from '../hooks/useShowToast';
 import postsAtom from '../atoms/postsAtom';
@@ -66,7 +66,6 @@ const RecipeCard = ({ post, postedBy }) => {
         }
     };
 
-
     if (!user) return null;
 
     return (
@@ -126,7 +125,19 @@ const RecipeCard = ({ post, postedBy }) => {
                             _hover={{ transform: "scale(1.05)", color: "green.500" }} color="gray" onClick={handleAddToFavorites} cursor="pointer" />
                     )}
                 </Flex>
-
+                <Flex justifyContent="center" mt={3} gap={1}>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                        <Text
+                            key={star}
+                            className={star <= post.rating ? 'filled-star' : 'empty-star'}
+                            cursor="default"
+                            fontSize="2xl"
+                            color={star <= post.rating ? "gold" : "gray"}
+                        >
+                            ★
+                        </Text>
+                    ))}
+                </Flex>
             </Flex>
         </Link>
     );

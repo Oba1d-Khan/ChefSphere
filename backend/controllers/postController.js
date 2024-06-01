@@ -212,5 +212,25 @@ const suggestRecipes = async (req, res) => {
 		res.status(500).json({ error: "Failed to fetch recipes" });
 	}
 };
+const ratePost = async (req, res) => {
+    const { postId } = req.params;
+    const { rating } = req.body;
 
-export { createPost, getPost, deletePost, likeUnlikePost, replyToPost, getFeedPosts, getUserPosts, searchPosts, getAllRecipes, suggestRecipes };
+    try {
+        console.log(`Received rating request for postId: ${postId} with rating: ${rating}`); // Debugging
+        const post = await Post.findById(postId);
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        post.rating = rating;
+        await post.save();
+
+        res.status(200).json({ message: 'Rating updated', rating: post.rating });
+    } catch (error) {
+        console.log(`Error in ratePost: ${error.message}`); // Debugging
+        res.status(500).json({ message: 'Server error', error });
+    }
+};
+
+export { createPost, getPost, deletePost, likeUnlikePost, replyToPost, getFeedPosts, getUserPosts, searchPosts, getAllRecipes, suggestRecipes,ratePost };
