@@ -49,6 +49,7 @@ const FollowingList = () => {
                     </Box>
                     <Button
                         size="sm"
+                        bgColor={"green.300"}
                         onClick={() => toggleFollow(followed._id)}
                     >
                         Unfollow
