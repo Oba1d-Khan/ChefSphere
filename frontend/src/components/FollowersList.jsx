@@ -16,11 +16,14 @@ const FollowersList = () => {
                 const response = await axios.get(`/api/users/followers/${user._id}`);
                 setFollowers(response.data);
             } catch (error) {
+                console.error("Error fetching followers:", error);
                 showToast("Error", "Error fetching followers", "error");
             }
         };
-        fetchFollowers();
-    }, [user._id, showToast]);
+        if (user?._id) {
+            fetchFollowers();
+        }
+    }, [user, showToast]);
 
     const toggleFollow = async (userId) => {
         try {
@@ -32,6 +35,7 @@ const FollowersList = () => {
             );
             showToast("Success", response.data.message, "success");
         } catch (error) {
+            console.error("Error toggling follow state:", error);
             showToast("Error", "Error toggling follow state", "error");
         }
     };
@@ -45,12 +49,7 @@ const FollowersList = () => {
                         <Text fontWeight="bold">{follower.name}</Text>
                         <Text fontSize="sm" color="gray.500">@{follower.username}</Text>
                     </Box>
-                    <Button
-                        size="sm"
-                        onClick={() => toggleFollow(follower._id)}
-                    >
-                        {follower.isFollowing ? "Unfollow" : "Follow"}
-                    </Button>
+
                 </Stack>
             ))}
         </Box>

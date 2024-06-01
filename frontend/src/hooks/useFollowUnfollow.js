@@ -2,6 +2,7 @@ import { useState } from "react";
 import useShowToast from "./useShowToast";
 import userAtom from "../atoms/userAtom";
 import { useRecoilValue } from "recoil";
+import axios from "axios";
 
 const useFollowUnfollow = (user) => {
 	const currentUser = useRecoilValue(userAtom);
@@ -18,13 +19,8 @@ const useFollowUnfollow = (user) => {
 
 		setUpdating(true);
 		try {
-			const res = await fetch(`/api/users/follow/${user._id}`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
-			const data = await res.json();
+			const res = await axios.post(`/api/users/follow/${user._id}`);
+			const data = res.data;
 			if (data.error) {
 				showToast("Error", data.error, "error");
 				return;
@@ -32,16 +28,13 @@ const useFollowUnfollow = (user) => {
 
 			if (following) {
 				showToast("Success", `Unfollowed ${user.name}`, "success");
-				user.followers.pop(); // simulate removing from followers
+				setFollowing(false);
 			} else {
 				showToast("Success", `Followed ${user.name}`, "success");
-				user.followers.push(currentUser?._id); // simulate adding to followers
+				setFollowing(true);
 			}
-			setFollowing(!following);
-
-			console.log(data);
 		} catch (error) {
-			showToast("Error", error, "error");
+			showToast("Error", error.message, "error");
 		} finally {
 			setUpdating(false);
 		}

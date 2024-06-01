@@ -2,7 +2,6 @@ import { Link } from "@chakra-ui/layout";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import { Link as RouterLink } from "react-router-dom";
-import Favorites from "../components/Favourites";
 import { Tab, TabList, TabPanel, TabPanels, Tabs, Box } from "@chakra-ui/react";
 import FollowersList from "./FollowersList";
 import FollowingList from "./FollowingsList";
@@ -45,12 +44,8 @@ const UserHeader = ({ user }) => {
           )}
         </div>
 
-        <div className="py-10">
-          <Favorites userId={user._id} />
-        </div>
       </div>
-      <Box>
-        {/* Existing profile header details */}
+      <Box mb={20}>
         <Tabs variant="soft-rounded" colorScheme="green">
           <TabList>
             <Tab>Followers</Tab>
@@ -65,7 +60,7 @@ const UserHeader = ({ user }) => {
               <FollowingList />
             </TabPanel>
             <TabPanel>
-              <Favourites />
+              <Favourites userId={user._id} />
             </TabPanel>
           </TabPanels>
         </Tabs>

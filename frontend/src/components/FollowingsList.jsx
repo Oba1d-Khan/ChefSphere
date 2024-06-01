@@ -16,22 +16,24 @@ const FollowingList = () => {
                 const response = await axios.get(`/api/users/following/${user._id}`);
                 setFollowing(response.data);
             } catch (error) {
+                console.error("Error fetching following:", error);
                 showToast("Error", "Error fetching following", "error");
             }
         };
-        fetchFollowing();
-    }, [user._id, showToast]);
+        if (user?._id) {
+            fetchFollowing();
+        }
+    }, [user, showToast]);
 
     const toggleFollow = async (userId) => {
         try {
             const response = await axios.post(`/api/users/follow/${userId}`);
             setFollowing((prev) =>
-                prev.map((followed) =>
-                    followed._id === userId ? { ...followed, isFollowing: !followed.isFollowing } : followed
-                )
+                prev.filter((followed) => followed._id !== userId)
             );
             showToast("Success", response.data.message, "success");
         } catch (error) {
+            console.error("Error toggling follow state:", error);
             showToast("Error", "Error toggling follow state", "error");
         }
     };
@@ -49,7 +51,7 @@ const FollowingList = () => {
                         size="sm"
                         onClick={() => toggleFollow(followed._id)}
                     >
-                        {followed.isFollowing ? "Unfollow" : "Follow"}
+                        Unfollow
                     </Button>
                 </Stack>
             ))}
