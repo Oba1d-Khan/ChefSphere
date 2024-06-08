@@ -97,19 +97,19 @@ const RecipeSuggester = () => {
                             mb={{ base: 4, md: 0 }}
                         >
                             <option value="ingredients">Ingredients</option>
-                            <option value="recipe">Recipe</option>
+                            <option value="recipe">Recipe Name</option>
                         </Select>
                     </Flex>
                     <Flex w={"full"} mx={"auto"} justify="center" mt={6}>
                         <Button
                             type="submit"
-                            bg="green.400"
+                            bg="whatsapp.600"
                             color="white"
                             fontWeight="semibold"
                             py={2}
                             px={6}
                             rounded="full"
-                            _hover={{ bg: "green.300" }}
+                            _hover={{ bg: "whatsapp.700" }}
                             mr={2}
                         >
                             Search
@@ -140,7 +140,7 @@ const RecipeSuggester = () => {
                     </Flex>
                 )}
 
-                {!loading && searchQuery.length > 6 && (
+                {!loading && searchQuery.length > 9 && (
                     <Flex justify="center" mt={4}>
                         <Text>No recipes found</Text>
                     </Flex>

@@ -93,14 +93,14 @@ const HomePage = () => {
 						/>
 						<Button
 							onClick={handleSearch}
-							bg="green.400"
+							bg="whatsapp.600"
 							color="white"
 							fontWeight="semibold"
 							py={2}
 							px={6}
 							ml={2}
 							rounded="full"
-							_hover={{ bg: "green.300" }}
+							_hover={{ bg: "whatsapp.700" }}
 						>
 							Search
 						</Button>
