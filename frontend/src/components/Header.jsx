@@ -39,34 +39,35 @@ const Header = () => {
 										exact
 										mx={4}
 										_hover={{ color: "green.800" }}
-										_activeLink={{ textDecoration: "underline" }}
+										_activeLink={{ textDecoration: "underline", color: "green.600" }}
 									>
 										Home
-									</Link>
-									<Link
-										as={RouterNavLink}
-										to={`/${user.username}`}
-										mx={4}
-										_hover={{ color: "green.800" }}
-										_activeLink={{ textDecoration: "underline" }}
-									>
-										Profile
 									</Link>
 									<Link
 										as={RouterNavLink}
 										to="/recipes"
 										mx={4}
 										_hover={{ color: "green.800" }}
-										_activeLink={{ textDecoration: "underline" }}
+										_activeLink={{ textDecoration: "underline", color: "green.600" }}
 									>
 										Recipes
 									</Link>
 									<Link
 										as={RouterNavLink}
+										to={`/${user.username}`}
+										mx={4}
+										_hover={{ color: "green.800" }}
+										_activeLink={{ textDecoration: "underline", color: "green.600" }}
+									>
+										Profile
+									</Link>
+
+									<Link
+										as={RouterNavLink}
 										to="/chat"
 										mx={4}
 										_hover={{ color: "green.800" }}
-										_activeLink={{ textDecoration: "underline" }}
+										_activeLink={{ textDecoration: "underline", color: "green.600" }}
 									>
 										Chat
 									</Link>
