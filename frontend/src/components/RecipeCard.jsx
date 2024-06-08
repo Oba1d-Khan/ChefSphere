@@ -1,12 +1,20 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Box, Image, Text, Flex, Icon, useColorModeValue, useToast } from '@chakra-ui/react';
-import { Timer, Utensils, BookmarkPlus, BookmarkCheck, Star, Heart, HeartOff } from 'lucide-react';
-import axios from 'axios';
-import useShowToast from '../hooks/useShowToast';
-import postsAtom from '../atoms/postsAtom';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import userAtom from '../atoms/userAtom';
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import {
+    Box,
+    Image,
+    Text,
+    Flex,
+    Icon,
+    useColorModeValue,
+    useToast,
+} from "@chakra-ui/react";
+import { Timer, Utensils, Star, Heart } from "lucide-react";
+import axios from "axios";
+import useShowToast from "../hooks/useShowToast";
+import postsAtom from "../atoms/postsAtom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
 
 const RecipeCard = ({ post, postedBy }) => {
     const [user, setUser] = useState(null);
@@ -16,10 +24,9 @@ const RecipeCard = ({ post, postedBy }) => {
     const currentUser = useRecoilValue(userAtom);
     const toast = useToast();
     const [reviewsCount, setReviewsCount] = useState(post.ratings.length);
-    const [rating, setRating] = useState(post.averageRating || 0);  // Average rating
+    const [rating, setRating] = useState(post.averageRating || 0); // Average rating
 
     useEffect(() => {
-        // Get the user who posted the recipe
         const getUser = async () => {
             try {
                 const res = await fetch(`/api/users/profile/${postedBy}`);
@@ -35,13 +42,12 @@ const RecipeCard = ({ post, postedBy }) => {
             }
         };
 
-        // Check if the recipe is already in the favorites
         const checkFavoriteStatus = async () => {
             try {
                 const res = await axios.get(`/api/users/favorites/${post._id}`);
                 setIsFavorite(res.data.isFavorite);
             } catch (error) {
-                console.error('Error checking favorite status:', error.message);
+                console.error("Error checking favorite status:", error.message);
             }
         };
 
@@ -189,10 +195,28 @@ const RecipeCard = ({ post, postedBy }) => {
                     </Flex>
                     <Flex>
                         {isFavorite ? (
-                            <Icon as={Heart} w={7} h={7} color="teal.500" fill="teal.400" stroke={"teal.500"} _hover={{ transform: "scale(1.05)" }} onClick={handleRemoveFromFavorites} cursor="pointer" />
+                            <Icon
+                                as={Heart}
+                                w={7}
+                                h={7}
+                                color="teal.500"
+                                fill="teal.400"
+                                stroke={"teal.500"}
+                                _hover={{ transform: "scale(1.05)" }}
+                                onClick={handleRemoveFromFavorites}
+                                cursor="pointer"
+                            />
                         ) : (
-                            <Icon as={Heart} w={6} h={6} transition="transform 0.3s"
-                                _hover={{ transform: "scale(1.05)", color: "teal.500" }} color="gray" onClick={handleAddToFavorites} cursor="pointer" />
+                            <Icon
+                                as={Heart}
+                                w={6}
+                                h={6}
+                                transition="transform 0.3s"
+                                _hover={{ transform: "scale(1.05)", color: "teal.500" }}
+                                color="gray"
+                                onClick={handleAddToFavorites}
+                                cursor="pointer"
+                            />
                         )}
                     </Flex>
                 </Flex>

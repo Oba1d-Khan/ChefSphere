@@ -3,39 +3,39 @@ import { Grid, GridItem, Collapse } from '@chakra-ui/react';
 import RecipeCard from './RecipeCard';
 import axios from 'axios';
 
-const Favourites = ({ userId }) => {
-    const [favorites, setFavorites] = useState([]);
+const HomePage = () => {
+    const [recipes, setRecipes] = useState([]);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchFavorites = async () => {
+        const fetchRecipes = async () => {
             try {
-                const response = await axios.get(`/api/users/favorites/${userId}`);
-                setFavorites(response.data.favorites);
+                const response = await axios.get('/api/recipes');
+                setRecipes(response.data.recipes);
             } catch (error) {
-                console.error("Error fetching favorites:", error);
-                setError('Error fetching favorites');
+                console.error("Error fetching recipes:", error);
+                setError('Error fetching recipes');
             }
         };
 
-        fetchFavorites();
-    }, [userId]);
+        fetchRecipes();
+    }, []);
 
     if (error) {
         return <div>{error}</div>;
     }
 
     return (
-        <div >
+        <div>
             <Collapse in={true}>
                 <Grid
                     templateColumns="repeat(auto-fill, minmax(300px, 1fr))"
                     gap={6}
                     justifyItems="center"
                 >
-                    {favorites.map(recipe => (
+                    {recipes.map(recipe => (
                         <GridItem key={recipe._id}>
-                            <RecipeCard post={recipe} postedBy={recipe.postedBy} />
+                            <RecipeCard post={recipe} postedBy={recipe.postedBy} isFavorite={recipe.isFavorite} />
                         </GridItem>
                     ))}
                 </Grid>
@@ -44,4 +44,4 @@ const Favourites = ({ userId }) => {
     );
 };
 
-export default Favourites;
+export default HomePage;
