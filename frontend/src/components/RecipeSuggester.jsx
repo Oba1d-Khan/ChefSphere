@@ -94,19 +94,21 @@ const RecipeSuggester = () => {
                     </Flex>
                 )}
 
-                {!loading && suggestedRecipes.length === 0 && (
+                {!loading && ingredients.length > 6 && (
                     <Flex justify="center" mt={4}>
                         <Text>No recipes found</Text>
                     </Flex>
                 )}
 
-                <Grid templateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap={6} mt={6}>
-                    {suggestedRecipes.map((recipe) => (
-                        <GridItem key={recipe._id}>
-                            <RecipeCard post={recipe} postedBy={recipe.postedBy} />
-                        </GridItem>
-                    ))}
-                </Grid>
+                {!loading && suggestedRecipes.length > 0 && (
+                    <Grid templateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap={6} mt={6}>
+                        {suggestedRecipes.map((recipe) => (
+                            <GridItem key={recipe._id}>
+                                <RecipeCard post={recipe} postedBy={recipe.postedBy} />
+                            </GridItem>
+                        ))}
+                    </Grid>
+                )}
             </Container>
         </Box>
     );
