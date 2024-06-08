@@ -6,11 +6,13 @@ import {
     Flex,
     FormControl,
     Heading,
+    Icon,
     Image,
     Input,
     Spinner,
     Text,
 } from "@chakra-ui/react";
+import { Star } from 'lucide-react';
 import Actions from "../components/Actions";
 import { useEffect, useRef, useState } from "react";
 import Comment from "../components/Comment";
@@ -45,7 +47,7 @@ const PostPage = () => {
     const [reply, setReply] = useState("");
     const [isReplying, setIsReplying] = useState(false);
     const [rating, setRating] = useState(0);
-
+    const [reviewsCount, setReviewsCount] = useState(0);
     const currentPost = posts[0];
     const commentsRef = useRef(null);
 
@@ -62,6 +64,7 @@ const PostPage = () => {
                 }
                 setPosts([data]);
                 setRating(data.rating || 0);
+                setReviewsCount(data.ratings.length);
             } catch (error) {
                 showToast("Error", error.message, "error");
             }
@@ -119,29 +122,19 @@ const PostPage = () => {
             setIsReplying(false);
         }
     };
+    const handleRating = async (newRating) => {
+        try {
+            const response = await axios.post(`/api/posts/${currentPost._id}/rate`, { rating: newRating });
+            showToast("Success", "Recipe rated successfully", "success");
+            setRating(response.data.averageRating);
+            setReviewsCount(response.data.ratings.length);
+        } catch (error) {
+            showToast("Error", error.message, "error");
+        }
+    };
 
-	// const handleRating = async (newRating) => {
-	// 	try {
-	// 		console.log(`Sending rating request to /api/posts/${currentPost._id}/rate with rating: ${newRating}`); // Debugging
-	// 		const response = await axios.put(`/api/posts/${currentPost._id}/rate`, { rating: newRating });
-	// 		console.log(`Response: ${response.data}`); // Debugging
-	// 		showToast("Success", "Recipe rated successfully", "success");
-	// 	} catch (error) {
-	// 		console.log(`Error in handleRating: ${error.message}`); // Debugging
-	// 		showToast("Error", error.message, "error");
-	// 	}
-	// };
-	const handleRating = async (newRating) => {
-		try {
-			const response = await axios.post(`/api/posts/${currentPost._id}/rate`, { rating: newRating });
-			showToast("Success", "Recipe rated successfully", "success");
-		} catch (error) {
-			showToast("Error", error.message, "error");
-		}
-	};
-	
-	
-	if (!user && loading) {
+
+    if (!user && loading) {
         return (
             <Flex justifyContent={"center"}>
                 <Spinner size={"xl"} />
@@ -232,51 +225,66 @@ const PostPage = () => {
             </Flex>
 
             <Flex justifyContent="center" mt={3} gap={1}>
-                {[1, 2, 3, 4, 5].map((star) => (
-                    <Text
-                        key={star}
-                        className={star <= rating ? 'filled-star' : 'empty-star'}
-                        onClick={() => handleRating(star)}
-                        cursor="pointer"
-                        fontSize="2xl"
-                        color={star <= rating ? "gold" : "gray"}
-                    >
-                        ★
-                    </Text>
-                ))}
-            </Flex>
+                <Flex justifyContent="space-between" alignItems="center" mt={3} gap={3}>
+                    <Flex alignItems="center" fontSize={"md"} >
+                        {Array(5)
+                            .fill("")
+                            .map((_, i) => (
+                                <Icon
+                                    as={Star}
+                                    key={i}
+                                    fill={i < Math.round(rating) ? "teal.300" : "gray.100"}
+                                    stroke={"teal.500"}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        handleRating(i + 1);
+                                    }}
+                                    cursor="pointer"
+                                />
+                            ))}
+                        <Box as="span" ml="2" color="gray.600" fontSize="sm">
+                            ( {reviewsCount} reviews )
+                        </Box>
+                    </Flex>
+                </Flex>
+            </Flex >
+
 
             <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }} py={4} ref={commentsRef}>
                 Comments
             </Heading>
             <Divider my={4} />
 
-            {showCommentInput && (
-                <Flex flexDirection="column" mt={4} p={4} border="1px" borderColor="gray.200" borderRadius="md">
-                    <FormControl>
-                        <Input
-                            placeholder='Write a comment...'
-                            value={reply}
-                            onChange={(e) => setReply(e.target.value)}
-                        />
-                    </FormControl>
-                    <Flex mt={2} justifyContent="flex-end">
-                        <Button size="sm" colorScheme="whatsapp" isLoading={isReplying} onClick={handleReply}>
-                            Post Comment
-                        </Button>
+            {
+                showCommentInput && (
+                    <Flex flexDirection="column" mt={4} p={4} border="1px" borderColor="gray.200" borderRadius="md">
+                        <FormControl>
+                            <Input
+                                placeholder='Write a comment...'
+                                value={reply}
+                                onChange={(e) => setReply(e.target.value)}
+                            />
+                        </FormControl>
+                        <Flex mt={2} justifyContent="flex-end">
+                            <Button size="sm" colorScheme="whatsapp" isLoading={isReplying} onClick={handleReply}>
+                                Post Comment
+                            </Button>
+                        </Flex>
                     </Flex>
-                </Flex>
-            )}
+                )
+            }
 
-            {currentPost.replies.map((reply) => (
-                <Comment
-                    key={reply._id}
-                    reply={reply}
-                    lastReply={
-                        reply._id === currentPost.replies[currentPost.replies.length - 1]._id
-                    }
-                />
-            ))}
+            {
+                currentPost.replies.map((reply) => (
+                    <Comment
+                        key={reply._id}
+                        reply={reply}
+                        lastReply={
+                            reply._id === currentPost.replies[currentPost.replies.length - 1]._id
+                        }
+                    />
+                ))
+            }
         </>
     );
 };

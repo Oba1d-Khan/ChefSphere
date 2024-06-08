@@ -15,6 +15,7 @@ const postSchema = mongoose.Schema(
             type: String,
             maxLength: 5000,
         },
+
         img: {
             type: String,
         },
@@ -51,9 +52,24 @@ const postSchema = mongoose.Schema(
                 username: {
                     type: String,
                 },
+                rating: { type: Number, default: 0 },
+                totalRatings: { type: Number, default: 0 },
+            },
+
+        ],
+        ratings: [
+            {
+                user: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "User",
+                },
+                score: {
+                    type: Number,
+                    required: true,
+                },
             },
         ],
-        rating: {
+        averageRating: {
             type: Number,
             default: 0,
         },
@@ -66,3 +82,4 @@ const postSchema = mongoose.Schema(
 const Post = mongoose.model("Post", postSchema);
 
 export default Post;
+

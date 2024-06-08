@@ -24,6 +24,7 @@ router.delete("/:id", protectRoute, deletePost);
 router.put("/like/:id", protectRoute, likeUnlikePost);
 router.put("/reply/:id", protectRoute, replyToPost);
 router.post("/suggest", protectRoute, suggestRecipes);
-router.post('/:postId/rate', protectRoute, ratePost);
+router.post("/rate", protectRoute, ratePost);
+
 
 export default router;

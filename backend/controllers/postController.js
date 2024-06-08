@@ -213,24 +213,41 @@ const suggestRecipes = async (req, res) => {
 	}
 };
 const ratePost = async (req, res) => {
-    const { postId } = req.params;
-    const { rating } = req.body;
+	const { postId, rating } = req.body;
+	const userId = req.user._id;
 
-    try {
-        console.log(`Received rating request for postId: ${postId} with rating: ${rating}`); // Debugging
-        const post = await Post.findById(postId);
-        if (!post) {
-            return res.status(404).json({ message: 'Post not found' });
-        }
+	if (!postId || !rating) {
+		return res.status(400).json({ error: 'Post ID and rating are required' });
+	}
 
-        post.rating = rating;
-        await post.save();
+	try {
+		const post = await Post.findById(postId);
+		if (!post) {
+			return res.status(404).json({ error: 'Post not found' });
+		}
 
-        res.status(200).json({ message: 'Rating updated', rating: post.rating });
-    } catch (error) {
-        console.log(`Error in ratePost: ${error.message}`); // Debugging
-        res.status(500).json({ message: 'Server error', error });
-    }
+		// Check if the user is the author
+		if (post.postedBy.equals(userId)) {
+			return res.status(403).json({ error: 'Authors cannot rate their own posts' });
+		}
+
+		// Check if the user has already rated the post
+		const existingRating = post.ratings.find(r => r.user.equals(userId));
+
+		if (existingRating) {
+			existingRating.score = rating;
+		} else {
+			post.ratings.push({ user: userId, score: rating });
+		}
+
+		// Calculate the average rating
+		const totalScore = post.ratings.reduce((acc, r) => acc + r.score, 0);
+		post.averageRating = totalScore / post.ratings.length;
+
+		await post.save();
+		res.json(post);
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
 };
-
-export { createPost, getPost, deletePost, likeUnlikePost, replyToPost, getFeedPosts, getUserPosts, searchPosts, getAllRecipes, suggestRecipes,ratePost };
+export { createPost, getPost, deletePost, likeUnlikePost, replyToPost, getFeedPosts, getUserPosts, searchPosts, getAllRecipes, suggestRecipes, ratePost };
