@@ -196,15 +196,23 @@ const getAllRecipes = async (req, res) => {
 
 
 const suggestRecipes = async (req, res) => {
-	const { ingredients } = req.body;
+	const { ingredients, searchType } = req.body;
 
 	try {
 		if (!ingredients || ingredients.length === 0) {
 			return res.status(400).json({ error: "Ingredients are required" });
 		}
 
-		const searchRegex = new RegExp(ingredients.join("|"), "i");
-		const recipes = await Post.find({ text: { $regex: searchRegex } });
+		let recipes;
+		if (searchType === "ingredients") {
+			const searchRegex = new RegExp(ingredients.join("|"), "i");
+			recipes = await Post.find({ text: { $regex: searchRegex } });
+		} else if (searchType === "recipe") {
+			const searchRegex = new RegExp(ingredients.join("|"), "i");
+			recipes = await Post.find({ recipeTitle: { $regex: searchRegex } });
+		} else {
+			return res.status(400).json({ error: "Invalid search type" });
+		}
 
 		res.status(200).json(recipes);
 	} catch (error) {
@@ -212,6 +220,7 @@ const suggestRecipes = async (req, res) => {
 		res.status(500).json({ error: "Failed to fetch recipes" });
 	}
 };
+
 const ratePost = async (req, res) => {
 	const { postId, rating } = req.body;
 	const userId = req.user._id;

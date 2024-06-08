@@ -8,13 +8,17 @@ import {
     Grid,
     GridItem,
     Container,
+    Select,
+    Icon,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import useShowToast from "../hooks/useShowToast";
 import RecipeCard from './RecipeCard';
+import { SearchX } from "lucide-react";
 
 const RecipeSuggester = () => {
-    const [ingredients, setIngredients] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchType, setSearchType] = useState("ingredients");
     const [loading, setLoading] = useState(false);
     const [suggestedRecipes, setSuggestedRecipes] = useState([]);
     const showToast = useShowToast();
@@ -30,7 +34,8 @@ const RecipeSuggester = () => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    ingredients: ingredients.split(",").map(ingredient => ingredient.trim())
+                    ingredients: searchQuery.split(",").map(item => item.trim()),
+                    searchType,
                 }),
             });
 
@@ -52,24 +57,50 @@ const RecipeSuggester = () => {
         }
     };
 
+    const handleClear = () => {
+        setSearchQuery("");
+        setSuggestedRecipes([]);
+    };
+
     return (
         <Box>
             <Box maxW="1400px" mx="auto" py={4}>
                 <form onSubmit={handleSearch}>
-                    <Flex maxW="600px" mx={"auto"}>
+                    <Flex maxW="full" mx="auto" justify="center" direction={{ base: "column", md: "row" }} alignItems="center">
                         <Input
+                            maxW={"500px"}
                             type="text"
-                            value={ingredients}
-                            onChange={(e) => setIngredients(e.target.value)}
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                             bg="whitesmoke"
                             rounded="full"
                             py={2}
                             px={6}
                             focusBorderColor="green.300"
-                            placeholder="Enter ingredients (comma separated)..."
+                            placeholder="Enter search query (comma separated if ingredients)..."
                             w="full"
                             borderColor={"green.200"}
+                            mr={{ base: 0, md: 2 }}
+                            mb={{ base: 4, md: 0 }}
                         />
+                        <Select
+                            value={searchType}
+                            onChange={(e) => setSearchType(e.target.value)}
+                            bg="whitesmoke"
+                            rounded="full"
+                            py={2}
+                            px={1}
+                            focusBorderColor="green.300"
+                            w={{ base: "full", md: "auto" }}
+                            borderColor={"green.200"}
+                            mr={{ base: 0, md: 2 }}
+                            mb={{ base: 4, md: 0 }}
+                        >
+                            <option value="ingredients">Ingredients</option>
+                            <option value="recipe">Recipe</option>
+                        </Select>
+                    </Flex>
+                    <Flex w={"full"} mx={"auto"} justify="center" mt={6}>
                         <Button
                             type="submit"
                             bg="green.400"
@@ -77,11 +108,26 @@ const RecipeSuggester = () => {
                             fontWeight="semibold"
                             py={2}
                             px={6}
-                            ml={2}
                             rounded="full"
                             _hover={{ bg: "green.300" }}
+                            mr={2}
                         >
                             Search
+                        </Button>
+                        <Button
+                            onClick={handleClear}
+                            bg="red.100"
+                            color="white"
+                            fontWeight="bold"
+                            py={2}
+                            px={4}
+                            ml={2}
+                            rounded="full"
+                            _hover={{ bg: "red.200" }}
+                        >
+                            <Icon as={SearchX} w={5} h={5} color={"red.600"} fill={'blackAlpha.200'} />
+
+
                         </Button>
                     </Flex>
                 </form>
@@ -94,7 +140,7 @@ const RecipeSuggester = () => {
                     </Flex>
                 )}
 
-                {!loading && ingredients.length > 6 && (
+                {!loading && searchQuery.length > 6 && (
                     <Flex justify="center" mt={4}>
                         <Text>No recipes found</Text>
                     </Flex>
