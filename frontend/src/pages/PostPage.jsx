@@ -157,7 +157,7 @@ const PostPage = () => {
 
     return (
         <>
-            <Flex py={"10"} gap={6}>
+            <Flex py={"10"} gap={6}>Post Page
                 <Flex w={"full"} alignItems={"center"} gap={4}>
                     <Avatar src={user.profilePic} size={"md"} />
                     <Flex flexDirection={"column"} gap={1}>

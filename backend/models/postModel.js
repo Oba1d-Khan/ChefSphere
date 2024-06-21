@@ -7,6 +7,11 @@ const postSchema = mongoose.Schema(
             ref: "User",
             required: true,
         },
+        community: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Community",
+            required: false,
+        },
         recipeTitle: {
             type: String,
             maxLength: 50,
@@ -15,7 +20,6 @@ const postSchema = mongoose.Schema(
             type: String,
             maxLength: 5000,
         },
-
         img: {
             type: String,
         },
@@ -55,7 +59,6 @@ const postSchema = mongoose.Schema(
                 rating: { type: Number, default: 0 },
                 totalRatings: { type: Number, default: 0 },
             },
-
         ],
         ratings: [
             {
@@ -82,4 +85,3 @@ const postSchema = mongoose.Schema(
 const Post = mongoose.model("Post", postSchema);
 
 export default Post;
-

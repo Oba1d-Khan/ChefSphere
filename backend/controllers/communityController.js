@@ -43,16 +43,19 @@ const getAllCommunities = async (req, res) => {
     }
 };
 
-const getCommunityPosts = async (req, res) => {
+
+const getCommunity = async (req, res) => {
+    const { communityId } = req.params;
     try {
-        const { communityId } = req.params;
-        const posts = await Post.find({ community: communityId }).populate('postedBy', 'username');
-        res.status(200).json(posts);
+        const community = await Community.findById(communityId);
+        if (!community) {
+            return res.status(404).json({ message: "Community not found" });
+        }
+        res.status(200).json(community);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: "Server error" });
     }
 };
-
 const createCommunityPost = async (req, res) => {
     try {
         const { communityId } = req.params;
@@ -69,16 +72,13 @@ const createCommunityPost = async (req, res) => {
     }
 };
 
-const getCommunity = async (req, res) => {
-    const { communityId } = req.params;
+const getCommunityPosts = async (req, res) => {
     try {
-        const community = await Community.findById(communityId);
-        if (!community) {
-            return res.status(404).json({ message: "Community not found" });
-        }
-        res.status(200).json(community);
+        const { communityId } = req.params;
+        const posts = await Post.find({ community: communityId }).populate('postedBy', 'username');
+        res.status(200).json(posts);
     } catch (error) {
-        res.status(500).json({ message: "Server error" });
+        res.status(500).json({ error: error.message });
     }
 };
 

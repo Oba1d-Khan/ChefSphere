@@ -11,6 +11,7 @@ const communitySchema = new mongoose.Schema(
         },
         members: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
         interests: [{ type: String, required: true }],
+        theme: { type: String },  // New field for theme
         posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
     },
     {
