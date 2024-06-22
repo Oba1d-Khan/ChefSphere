@@ -26,7 +26,7 @@ router.put("/update/:id", protectRoute, updateUser);
 router.put("/freeze", protectRoute, freezeAccount);
 router.post('/favorites/:postId', protectRoute, addFavorite);
 router.delete('/favorites/:postId', protectRoute, removeFavorite);
-router.get('/favorites/:userId', protectRoute, getFavorites);
+router.get('/favorites', protectRoute, getFavorites);
 router.get('/followers/:userId', protectRoute, getFollowers);
 router.get('/following/:userId', protectRoute, getFollowing);
 

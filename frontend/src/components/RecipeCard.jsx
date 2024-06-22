@@ -16,7 +16,7 @@ import postsAtom from "../atoms/postsAtom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 
-const RecipeCard = ({ post, postedBy }) => {
+const RecipeCard = ({ post }) => {
     const [user, setUser] = useState(null);
     const showToast = useShowToast();
     const [posts, setPosts] = useRecoilState(postsAtom);
@@ -29,7 +29,7 @@ const RecipeCard = ({ post, postedBy }) => {
     useEffect(() => {
         const getUser = async () => {
             try {
-                const res = await fetch(`/api/users/profile/${postedBy}`);
+                const res = await fetch(`/api/users/profile/${post.postedBy}`);
                 const data = await res.json();
                 if (data.error) {
                     showToast("Error", data.error, "error");
@@ -44,8 +44,9 @@ const RecipeCard = ({ post, postedBy }) => {
 
         const checkFavoriteStatus = async () => {
             try {
-                const res = await axios.get(`/api/users/favorites/${post._id}`);
-                setIsFavorite(res.data.isFavorite);
+                const res = await axios.get(`/api/users/favorites`);
+                const favoritePostIds = res.data.favorites.map(fav => fav._id);
+                setIsFavorite(favoritePostIds.includes(post._id));
             } catch (error) {
                 console.error("Error checking favorite status:", error.message);
             }
@@ -53,7 +54,7 @@ const RecipeCard = ({ post, postedBy }) => {
 
         getUser();
         checkFavoriteStatus();
-    }, [postedBy, post._id, showToast]);
+    }, [post.postedBy, post._id, showToast]);
 
     const handleAddToFavorites = async (e) => {
         e.preventDefault();
@@ -79,7 +80,7 @@ const RecipeCard = ({ post, postedBy }) => {
 
     const handleRating = async (newRating) => {
         try {
-            const res = await fetch("/api/posts/rate", {
+            const res = await fetch(`/api/posts/rate`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

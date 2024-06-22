@@ -150,7 +150,7 @@ const HomePage = () => {
 				)}
 
 				{/* Categories Section */}
-				<Box>
+				{/* <Box>
 					<Flex align="center" justify="space-between" py={8}>
 						<Text fontSize="2xl" fontWeight="semibold">
 							Categories
@@ -172,7 +172,7 @@ const HomePage = () => {
 							</Box>
 						))}
 					</Grid>
-				</Box>
+				</Box> */}
 
 
 				{/* Recipes Section */}

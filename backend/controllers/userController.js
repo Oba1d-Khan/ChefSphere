@@ -240,57 +240,56 @@ const freezeAccount = async (req, res) => {
 };
 
 const addFavorite = async (req, res) => {
-	try {
-		const user = await User.findById(req.user._id);
-		const post = await Post.findById(req.params.postId);
+    try {
+        const user = await User.findById(req.user._id);
+        const post = await Post.findById(req.params.postId);
 
-		if (!user || !post) {
-			return res.status(404).json({ message: 'User or Post not found' });
-		}
+        if (!user || !post) {
+            return res.status(404).json({ message: 'User or Post not found' });
+        }
 
-		user.favorites.push(post._id);
-		await user.save();
+        if (user.favorites.includes(post._id)) {
+            return res.status(400).json({ message: 'Post already in favorites' });
+        }
 
-		res.status(200).json({ message: 'Post added to favorites', favorites: user.favorites });
-	} catch (error) {
-		res.status(500).json({ message: 'Server error', error });
-	}
+        user.favorites.push(post._id);
+        await user.save();
+
+        res.status(200).json({ message: 'Post added to favorites', favorites: user.favorites });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
 };
+
 const removeFavorite = async (req, res) => {
-	try {
-		const user = await User.findById(req.user._id);
+    try {
+        const user = await User.findById(req.user._id);
 
-		if (!user) {
-			return res.status(404).json({ message: 'User not found' });
-		}
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
 
-		user.favorites = user.favorites.filter(fav => fav.toString() !== req.params.postId);
-		await user.save();
+        user.favorites = user.favorites.filter(fav => fav.toString() !== req.params.postId);
+        await user.save();
 
-		res.status(200).json({ message: 'Post removed from favorites', favorites: user.favorites });
-	} catch (error) {
-		res.status(500).json({ message: 'Server error', error });
-	}
+        res.status(200).json({ message: 'Post removed from favorites', favorites: user.favorites });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
 };
+
 const getFavorites = async (req, res) => {
-	try {
-		console.log("Fetching favorites for user ID:", req.params.userId);
+    try {
+        const user = await User.findById(req.user._id).populate('favorites');
 
-		const user = await User.findById(req.params.userId).populate('favorites');
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
 
-		if (!user) {
-			console.log("User not found");
-			return res.status(404).json({ error: 'User not found' });
-		}
-
-		console.log("User found:", user);
-		console.log("Favorites:", user.favorites);
-
-		res.status(200).json({ favorites: user.favorites });
-	} catch (error) {
-		console.error("Error fetching favorites:", error);
-		res.status(500).json({ error: 'Server error' });
-	}
+        res.status(200).json({ favorites: user.favorites });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
 };
 
  const getFollowers = async (req, res) => {
