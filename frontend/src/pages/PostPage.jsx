@@ -35,6 +35,7 @@ import {
     WhatsappIcon,
 } from "react-share";
 import axios from "axios";
+import Rating from "../components/Rating";
 
 const PostPage = () => {
     const { user, loading } = useGetUserProfile();
@@ -46,8 +47,6 @@ const PostPage = () => {
     const [showCommentInput, setShowCommentInput] = useState(false);
     const [reply, setReply] = useState("");
     const [isReplying, setIsReplying] = useState(false);
-    const [rating, setRating] = useState(0);
-    const [reviewsCount, setReviewsCount] = useState(0);
     const currentPost = posts[0];
     const commentsRef = useRef(null);
 
@@ -63,8 +62,6 @@ const PostPage = () => {
                     return;
                 }
                 setPosts([data]);
-                setRating(data.rating || 0);
-                setReviewsCount(data.ratings.length);
             } catch (error) {
                 showToast("Error", error.message, "error");
             }
@@ -122,17 +119,6 @@ const PostPage = () => {
             setIsReplying(false);
         }
     };
-    const handleRating = async (newRating) => {
-        try {
-            const response = await axios.post(`/api/posts/${currentPost._id}/rate`, { rating: newRating });
-            showToast("Success", "Recipe rated successfully", "success");
-            setRating(response.data.averageRating);
-            setReviewsCount(response.data.ratings.length);
-        } catch (error) {
-            showToast("Error", error.message, "error");
-        }
-    };
-
 
     if (!user && loading) {
         return (
@@ -225,30 +211,12 @@ const PostPage = () => {
             </Flex>
 
             <Flex justifyContent="center" mt={3} gap={1}>
-                <Flex justifyContent="space-between" alignItems="center" mt={3} gap={3}>
-                    <Flex alignItems="center" fontSize={"md"} >
-                        {Array(5)
-                            .fill("")
-                            .map((_, i) => (
-                                <Icon
-                                    as={Star}
-                                    key={i}
-                                    fill={i < Math.round(rating) ? "teal.300" : "gray.100"}
-                                    stroke={"teal.500"}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        handleRating(i + 1);
-                                    }}
-                                    cursor="pointer"
-                                />
-                            ))}
-                        <Box as="span" ml="2" color="gray.600" fontSize="sm">
-                            ( {reviewsCount} reviews )
-                        </Box>
-                    </Flex>
-                </Flex>
+                <Rating
+                    postId={currentPost._id}
+                    initialRating={currentPost.averageRating}
+                    initialReviewsCount={currentPost.ratings.length}
+                />
             </Flex >
-
 
             <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }} py={4} ref={commentsRef}>
                 Comments

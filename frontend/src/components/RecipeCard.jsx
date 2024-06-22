@@ -9,12 +9,13 @@ import {
     useColorModeValue,
     useToast,
 } from "@chakra-ui/react";
-import { Timer, Utensils, Star, Heart } from "lucide-react";
+import { Timer, Utensils, Heart } from "lucide-react";
 import axios from "axios";
 import useShowToast from "../hooks/useShowToast";
 import postsAtom from "../atoms/postsAtom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
+import Rating from "../components/Rating";
 
 const RecipeCard = ({ post, handleRemoveFromFavorites }) => {
     const [user, setUser] = useState(null);
@@ -23,8 +24,6 @@ const RecipeCard = ({ post, handleRemoveFromFavorites }) => {
     const [isFavorite, setIsFavorite] = useState(false);
     const currentUser = useRecoilValue(userAtom);
     const toast = useToast();
-    const [reviewsCount, setReviewsCount] = useState(post.ratings.length);
-    const [rating, setRating] = useState(post.averageRating || 0); // Average rating
 
     useEffect(() => {
         const getUser = async () => {
@@ -81,50 +80,6 @@ const RecipeCard = ({ post, handleRemoveFromFavorites }) => {
         }
     };
 
-    const handleRating = async (newRating) => {
-        try {
-            const res = await fetch(`/api/posts/rate`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${currentUser.token}`,
-                },
-                body: JSON.stringify({
-                    postId: post._id,
-                    rating: newRating,
-                }),
-            });
-            const data = await res.json();
-            if (data.error) {
-                toast({
-                    title: "Error",
-                    description: data.error,
-                    status: "error",
-                    duration: 9000,
-                    isClosable: true,
-                });
-            } else {
-                toast({
-                    title: "Success",
-                    description: "Post rated successfully",
-                    status: "success",
-                    duration: 9000,
-                    isClosable: true,
-                });
-                setRating(data.averageRating);
-                setReviewsCount(data.ratings.length);
-            }
-        } catch (error) {
-            toast({
-                title: "Error",
-                description: error.message,
-                status: "error",
-                duration: 9000,
-                isClosable: true,
-            });
-        }
-    };
-
     if (!user) return null;
 
     return (
@@ -177,26 +132,7 @@ const RecipeCard = ({ post, handleRemoveFromFavorites }) => {
                     </Flex>
                 </Flex>
                 <Flex justifyContent="space-between" alignItems="center" mt={3} gap={3}>
-                    <Flex alignItems="center">
-                        {Array(5)
-                            .fill("")
-                            .map((_, i) => (
-                                <Icon
-                                    as={Star}
-                                    key={i}
-                                    fill={i < Math.round(rating) ? "teal.300" : "gray.100"}
-                                    stroke={"teal.500"}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        handleRating(i + 1);
-                                    }}
-                                    cursor="pointer"
-                                />
-                            ))}
-                        <Box as="span" ml="2" color="gray.600" fontSize="sm">
-                            ({reviewsCount})
-                        </Box>
-                    </Flex>
+                    <Rating postId={post._id} initialRating={post.averageRating} initialReviewsCount={post.ratings.length} />
                     <Flex>
                         {isFavorite ? (
                             <Icon
