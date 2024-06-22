@@ -1,16 +1,20 @@
+// routes/userRoutes.js
+
 import express from "express";
 import {
-	followUnFollowUser,
-	getUserProfile,
-	loginUser,
-	logoutUser,
-	signupUser,
-	updateUser,
-	getSuggestedUsers,
-	freezeAccount,
-	addFavorite,
-	removeFavorite,
-	getFavorites, getFollowers, getFollowing
+  followUnFollowUser,
+  getUserProfile,
+  loginUser,
+  logoutUser,
+  signupUser,
+  updateUser,
+  getSuggestedUsers,
+  freezeAccount,
+  addFavorite,
+  removeFavorite,
+  getFavorites,
+  getFollowers,
+  getFollowing
 } from "../controllers/userController.js";
 import protectRoute from "../middlewares/protectRoute.js";
 

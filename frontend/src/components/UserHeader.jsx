@@ -1,10 +1,12 @@
+// components/UserHeader.jsx
+
 import { Link } from "@chakra-ui/layout";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import { Link as RouterLink } from "react-router-dom";
 import { Tab, TabList, TabPanel, TabPanels, Tabs, Box } from "@chakra-ui/react";
-import FollowersList from "./FollowersList";
-import FollowingList from "./FollowingsList";
+import FollowersList from "../components/FollowersList";
+import FollowingList from "../components/FollowingsList";
 import Favourites from "../components/Favourites";
 
 const UserHeader = ({ user }) => {
@@ -43,7 +45,6 @@ const UserHeader = ({ user }) => {
             </Link>
           )}
         </div>
-
       </div>
       <Box mb={20}>
         <Tabs variant="soft-rounded" colorScheme="green">
@@ -54,10 +55,10 @@ const UserHeader = ({ user }) => {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <FollowersList />
+              <FollowersList userId={user._id} />
             </TabPanel>
             <TabPanel>
-              <FollowingList />
+              <FollowingList userId={user._id} />
             </TabPanel>
             <TabPanel>
               <Favourites userId={user._id} />
