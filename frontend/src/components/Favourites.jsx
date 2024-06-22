@@ -21,6 +21,16 @@ const Favourites = () => {
         fetchFavorites();
     }, []);
 
+    const handleRemoveFromFavorites = async (postId) => {
+        try {
+            await axios.delete(`/api/users/favorites/${postId}`);
+            setRecipes(prevRecipes => prevRecipes.filter(recipe => recipe._id !== postId));
+        } catch (error) {
+            console.error("Error removing from favorites:", error);
+            setError('Error removing from favorites');
+        }
+    };
+
     if (error) {
         return <div>{error}</div>;
     }
@@ -35,7 +45,7 @@ const Favourites = () => {
                 >
                     {recipes.map(recipe => (
                         <GridItem key={recipe._id}>
-                            <RecipeCard post={recipe} />
+                            <RecipeCard post={recipe} handleRemoveFromFavorites={handleRemoveFromFavorites} />
                         </GridItem>
                     ))}
                 </Grid>

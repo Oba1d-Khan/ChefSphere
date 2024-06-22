@@ -16,7 +16,7 @@ import postsAtom from "../atoms/postsAtom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 
-const RecipeCard = ({ post }) => {
+const RecipeCard = ({ post, handleRemoveFromFavorites }) => {
     const [user, setUser] = useState(null);
     const showToast = useShowToast();
     const [posts, setPosts] = useRecoilState(postsAtom);
@@ -67,12 +67,15 @@ const RecipeCard = ({ post }) => {
         }
     };
 
-    const handleRemoveFromFavorites = async (e) => {
+    const handleRemove = async (e) => {
         e.preventDefault();
         try {
             await axios.delete(`/api/users/favorites/${post._id}`);
             showToast("Success", "Recipe removed from favorites", "success");
             setIsFavorite(false);
+            if (handleRemoveFromFavorites) {
+                handleRemoveFromFavorites(post._id);
+            }
         } catch (error) {
             showToast("Error", error.message, "error");
         }
@@ -204,7 +207,7 @@ const RecipeCard = ({ post }) => {
                                 fill="teal.400"
                                 stroke={"teal.500"}
                                 _hover={{ transform: "scale(1.05)" }}
-                                onClick={handleRemoveFromFavorites}
+                                onClick={handleRemove}
                                 cursor="pointer"
                             />
                         ) : (
