@@ -27,10 +27,10 @@ const useFollowUnfollow = (user) => {
 			}
 
 			if (following) {
-				showToast("Success", `Unfollowed ${user.name}`, "success");
+				showToast("Success", `Followed ${user.name}`, "success");
 				setFollowing(false);
 			} else {
-				showToast("Success", `Followed ${user.name}`, "success");
+				showToast("Success", `Unfollowed ${user.name}`, "success");
 				setFollowing(true);
 			}
 		} catch (error) {

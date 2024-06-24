@@ -22,8 +22,10 @@ const SuggestedUser = ({ user }) => {
 			{/* right side */}
 			<Button
 				size={"sm"}
-				color={following ? "black" : "white"}
-				bg={following ? "white" : "green.400"}
+				// color={following ? "black" : "white"}
+				// bg={following ? "white" : "green.400"}
+				color={following ? "white" : "black"}
+				bg={following ? "green.400" : "white"}
 				onClick={handleFollowUnfollow}
 				isLoading={updating}
 				_hover={{
@@ -31,7 +33,7 @@ const SuggestedUser = ({ user }) => {
 					opacity: ".8",
 				}}
 			>
-				{following ? "Unfollow" : "Follow"}
+				{following ? "Follow" : "Unfollow"}
 			</Button>
 		</Flex>
 	);

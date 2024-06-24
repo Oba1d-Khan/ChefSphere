@@ -101,7 +101,7 @@ const HeroSection = () => {
                         h="80%"
                         minW={{ base: 'auto', md: '30rem' }}
                         objectFit="cover"
-                        src="/public/chicken tikka.png"
+                        src="/chicken tikka.png"
                         rounded="xl"
                         fallback={<Skeleton />}
                     />
