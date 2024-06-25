@@ -9,7 +9,7 @@ import {
     useColorModeValue,
     useToast,
 } from "@chakra-ui/react";
-import { Timer, Utensils, Heart } from "lucide-react";
+import { Timer, Utensils, Bookmark, BookmarkPlus } from "lucide-react";
 import axios from "axios";
 import useShowToast from "../hooks/useShowToast";
 import postsAtom from "../atoms/postsAtom";
@@ -59,7 +59,7 @@ const RecipeCard = ({ post, handleRemoveFromFavorites }) => {
         e.preventDefault();
         try {
             await axios.post(`/api/users/favorites/${post._id}`);
-            showToast("Success", "Recipe added to favorites", "success");
+            showToast("Success", "Added to Favorites", "success");
             setIsFavorite(true);
         } catch (error) {
             showToast("Error", error.message, "error");
@@ -70,7 +70,7 @@ const RecipeCard = ({ post, handleRemoveFromFavorites }) => {
         e.preventDefault();
         try {
             await axios.delete(`/api/users/favorites/${post._id}`);
-            showToast("Success", "Recipe removed from favorites", "success");
+            showToast("Success", "Removed from Favorites", "success");
             setIsFavorite(false);
             if (handleRemoveFromFavorites) {
                 handleRemoveFromFavorites(post._id);
@@ -87,10 +87,9 @@ const RecipeCard = ({ post, handleRemoveFromFavorites }) => {
             <Flex
                 flex={1}
                 flexDirection={"column"}
-                gap={4}
+                gap={1}
                 shadow={"lg"}
                 rounded={"lg"}
-                p={6}
                 _hover={{ shadow: "xl" }}
                 transition="all 0.3s"
                 bg="white"
@@ -108,59 +107,60 @@ const RecipeCard = ({ post, handleRemoveFromFavorites }) => {
                         />
                     </Box>
                 )}
-                <Text
-                    my={3}
-                    fontSize={{ base: "xl", md: "2xl" }}
-                    fontWeight="bold"
-                    color={useColorModeValue("black", "white")}
-                >
-                    {post.recipeTitle}
-                </Text>
-                <Flex
-                    gap={3}
-                    my={3}
-                    alignItems="center"
-                    flexWrap="wrap"
-                    color={useColorModeValue("gray.600", "gray.300")}
-                >
-                    <Flex alignItems="center">
-                        <Icon as={Utensils} w={5} h={5} mr={1} />
-                        <Text fontSize="md">{post.recipeOrigin}</Text>
+                <Box px={4} pt={2} pb={6}>
+                    <Text
+                        fontSize={{ base: "xl", md: "2xl" }}
+                        fontWeight="bold"
+                        color={useColorModeValue("black", "white")}
+                    >
+                        {post.recipeTitle}
+                    </Text>
+                    <Flex
+                        gap={3}
+                        my={3}
+                        alignItems="center"
+                        flexWrap="wrap"
+                        color={useColorModeValue("gray.600", "gray.300")}
+                    >
+                        <Flex alignItems="center">
+                            <Icon as={Utensils} w={5} h={5} mr={1} />
+                            <Text fontSize="md">{post.recipeOrigin}</Text>
+                        </Flex>
+                        <Flex alignItems="center">
+                            <Icon as={Timer} w={5} h={5} mr={1} />
+                            <Text fontSize="md">{post.cookingTime}</Text>
+                        </Flex>
                     </Flex>
-                    <Flex alignItems="center">
-                        <Icon as={Timer} w={5} h={5} mr={1} />
-                        <Text fontSize="md">{post.cookingTime}</Text>
+                    <Flex justifyContent="space-between" alignItems="center" mt={3} gap={3}>
+                        <Rating postId={post._id} initialRating={post.averageRating} initialReviewsCount={post.ratings.length} />
+                        <Flex>
+                            {isFavorite ? (
+                                <Icon
+                                    as={Bookmark}
+                                    w={6}
+                                    h={6}
+                                    color="teal.500"
+                                    fill="teal.400"
+                                    stroke={"teal.500"}
+                                    _hover={{ transform: "scale(1.05)" }}
+                                    onClick={handleRemove}
+                                    cursor="pointer"
+                                />
+                            ) : (
+                                <Icon
+                                    as={BookmarkPlus}
+                                    w={6}
+                                    h={6}
+                                    transition="transform 0.3s"
+                                    _hover={{ transform: "scale(1.05)", color: "teal.500" }}
+                                    color="gray"
+                                    onClick={handleAddToFavorites}
+                                    cursor="pointer"
+                                />
+                            )}
+                        </Flex>
                     </Flex>
-                </Flex>
-                <Flex justifyContent="space-between" alignItems="center" mt={3} gap={3}>
-                    <Rating postId={post._id} initialRating={post.averageRating} initialReviewsCount={post.ratings.length} />
-                    <Flex>
-                        {isFavorite ? (
-                            <Icon
-                                as={Heart}
-                                w={7}
-                                h={7}
-                                color="teal.500"
-                                fill="teal.400"
-                                stroke={"teal.500"}
-                                _hover={{ transform: "scale(1.05)" }}
-                                onClick={handleRemove}
-                                cursor="pointer"
-                            />
-                        ) : (
-                            <Icon
-                                as={Heart}
-                                w={6}
-                                h={6}
-                                transition="transform 0.3s"
-                                _hover={{ transform: "scale(1.05)", color: "teal.500" }}
-                                color="gray"
-                                onClick={handleAddToFavorites}
-                                cursor="pointer"
-                            />
-                        )}
-                    </Flex>
-                </Flex>
+                </Box>
             </Flex>
         </Link>
     );
