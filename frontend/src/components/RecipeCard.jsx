@@ -104,6 +104,7 @@ const RecipeCard = ({ post, handleRemoveFromFavorites }) => {
                             objectFit="cover"
                             transition="transform 0.3s"
                             _hover={{ transform: "scale(1.05)" }}
+                            loading="lazy" // Lazy loading images
                         />
                     </Box>
                 )}
