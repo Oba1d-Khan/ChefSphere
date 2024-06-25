@@ -1,13 +1,26 @@
-import { Box, Container, Flex, Spinner, Heading, Text, Button, Grid, Image, Input, Icon } from "@chakra-ui/react";
+import {
+	Box,
+	Container,
+	Flex,
+	Spinner,
+	Heading,
+	Grid,
+	Input,
+	IconButton,
+	InputGroup,
+	InputRightElement,
+	Text,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
+import { SearchX } from "lucide-react";
+import { motion } from "framer-motion";
 import useShowToast from "../hooks/useShowToast";
 import postsAtom from "../atoms/postsAtom";
-import FeaturedPost from "../components/FeaturedPost";
 import HeroSection from "../components/Hero";
-import { SearchX } from "lucide-react";
-import RecipeSuggester from "../components/RecipeSuggester";
 import RecipeCard from "../components/RecipeCard";
+
+const MotionGrid = motion(Grid);
 
 const HomePage = () => {
 	const [posts, setPosts] = useRecoilState(postsAtom);
@@ -28,7 +41,6 @@ const HomePage = () => {
 					showToast("Error", data.error, "error");
 					return;
 				}
-				console.log(data);
 				setPosts(data);
 			} catch (error) {
 				showToast("Error", error.message, "error");
@@ -39,30 +51,39 @@ const HomePage = () => {
 		getFeedPosts();
 	}, [showToast, setPosts]);
 
-	const handleSearch = async (e) => {
-		e.preventDefault();
-		setLoading(true);
-		try {
-			if (!searchQuery) {
-				setSearchedPosts([]);
-				return;
-			}
+	useEffect(() => {
+		const handleSearch = async () => {
+			setLoading(true);
+			try {
+				if (!searchQuery) {
+					setSearchedPosts([]);
+					setSearchClicked(false);
+					return;
+				}
 
-			const res = await fetch(`/api/posts/search?q=${searchQuery}`);
-			const searchData = await res.json();
-			console.log("search data from handle search", searchData);
-			if (searchData.error) {
-				showToast("Error", searchData.error, "error");
-				return;
+				const res = await fetch(`/api/posts/search?q=${searchQuery}`);
+				const searchData = await res.json();
+				if (searchData.error) {
+					showToast("Error", searchData.error, "error");
+					return;
+				}
+				setSearchedPosts(searchData);
+				setSearchClicked(true);
+			} catch (error) {
+				showToast("Error", error.message, "error");
+			} finally {
+				setLoading(false);
 			}
-			setSearchedPosts(searchData);
-			setSearchClicked(true);
-		} catch (error) {
-			showToast("Error", error.message, "error");
-		} finally {
-			setLoading(false);
+		};
+
+		if (searchQuery) {
+			const delayDebounceFn = setTimeout(() => {
+				handleSearch();
+			}, 300); // Debounce time in ms
+
+			return () => clearTimeout(delayDebounceFn);
 		}
-	};
+	}, [searchQuery, showToast]);
 
 	const clearSearch = () => {
 		setSearchQuery("");
@@ -76,8 +97,8 @@ const HomePage = () => {
 
 			{/* Search Section */}
 			<Box maxW="1400px" mx="auto" py={4}>
-				<form onSubmit={handleSearch} >
-					<Flex maxW="600px" mx={"auto"}>
+				<Flex maxW="600px" mx={"auto"}>
+					<InputGroup>
 						<Input
 							type="text"
 							value={searchQuery}
@@ -91,36 +112,22 @@ const HomePage = () => {
 							w="full"
 							borderColor={"green.200"}
 						/>
-						<Button
-							onClick={handleSearch}
-							bg="whatsapp.600"
-							color="white"
-							fontWeight="semibold"
-							py={2}
-							px={6}
-							ml={2}
-							rounded="full"
-							_hover={{ bg: "whatsapp.700" }}
-						>
-							Search
-						</Button>
-						<Button
-							onClick={clearSearch}
-							bg="red.200"
-							color="white"
-							fontWeight="bold"
-							py={2}
-							px={4}
-							ml={2}
-							rounded="full"
-							_hover={{ bg: "red.300" }}
-						>
-							<Icon as={SearchX} w={5} h={5} color={"blackAlpha.800"} fill={'blackAlpha.200'} />
-
-
-						</Button>
-					</Flex>
-				</form>
+						<InputRightElement>
+							{searchQuery && (
+								<IconButton
+									aria-label="Clear search"
+									icon={<SearchX />}
+									onClick={clearSearch}
+									size="sm"
+									bg="red.200"
+									color="white"
+									_hover={{ bg: "red.300" }}
+									rounded="full"
+								/>
+							)}
+						</InputRightElement>
+					</InputGroup>
+				</Flex>
 			</Box>
 
 			<Container maxW="container.lg" py={8}>
@@ -141,41 +148,22 @@ const HomePage = () => {
 						<Heading as="h2" size="lg" mb={4}>
 							Searched Results
 						</Heading>
-						<Grid templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }} mx={"auto"} gap={4} justifyItems={"between"}>
+						<MotionGrid
+							templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}
+							mx={"auto"}
+							gap={4}
+							justifyItems={"between"}
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							transition={{ duration: 0.5 }}
+						>
 							{searchedPosts.map((post) => (
-								<FeaturedPost key={post._id} post={post} postedBy={post.postedBy} />
+								<RecipeCard key={post._id} post={post} />
 							))}
-						</Grid>
+						</MotionGrid>
 					</Box>
 				)}
 
-				{/* Categories Section */}
-				{/* <Box>
-					<Flex align="center" justify="space-between" py={8}>
-						<Text fontSize="2xl" fontWeight="semibold">
-							Categories
-						</Text>
-						<Button bg="white" _hover={{ bg: "gray.200" }} color="black" fontWeight="bold" py={2} px={4} rounded="md">
-							View All Categories
-						</Button>
-					</Flex>
-					<Grid templateColumns="repeat(4, 1fr)" gap={4}>
-						{[
-							{ src: "/public/meat.png", label: "Meat" },
-							{ src: "/public/vegetable.png", label: "Vegan" },
-							{ src: "/public/chocolate-bar.png", label: "Chocolate" },
-							{ src: "/public/cake-slice.png", label: "Cake" }
-						].map((category) => (
-							<Box textAlign="center" key={category.label}>
-								<Image src={category.src} alt={category.label} w="16" h="16" mx="auto" mb={2} />
-								<Text fontSize="sm">{category.label}</Text>
-							</Box>
-						))}
-					</Grid>
-				</Box> */}
-
-
-				{/* Recipes Section */}
 				<Box py={8}>
 					<Heading as="h2" size="lg" textAlign="center" mb={8}>
 						Simple and Tasty Recipes
@@ -192,15 +180,20 @@ const HomePage = () => {
 						</Heading>
 					)}
 
-					<Grid templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }} gap={4}>
+					<MotionGrid
+						templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}
+						gap={4}
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						transition={{ duration: 0.5 }}
+					>
 						{posts.map((post) => (
-							<RecipeCard key={post._id} post={post} postedBy={post.postedBy} />
+							<RecipeCard key={post._id} post={post} />
 						))}
-					</Grid>
+					</MotionGrid>
 				</Box>
 			</Container>
 
-			{/* Footer */}
 			<Box textAlign="center" color="gray.600" fontSize="sm" py={4}>
 				© 2024 ChefSphere. All rights reserved.
 			</Box>
