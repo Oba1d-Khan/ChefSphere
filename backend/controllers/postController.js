@@ -5,11 +5,11 @@ import axios from "axios";
 
 const createPost = async (req, res) => {
 	try {
-		const { postedBy, text, recipeTitle, recipeOrigin, cookingTime, tags } = req.body;
+		const { postedBy, text, recipeTitle, recipeOrigin, cookingTime, tags, ingredients, directions } = req.body;
 		let { img } = req.body;
 
 		if (!postedBy || !recipeTitle || !text || !cookingTime || !recipeOrigin) {
-			return res.status(400).json({ error: "Postedby , title , cooking time and text fields are required" });
+			return res.status(400).json({ error: "Postedby, title, cooking time, and text fields are required" });
 		}
 
 		const user = await User.findById(postedBy);
@@ -31,7 +31,7 @@ const createPost = async (req, res) => {
 			img = uploadedResponse.secure_url;
 		}
 
-		const newPost = new Post({ postedBy, recipeTitle, text, recipeOrigin, cookingTime, img, tags });
+		const newPost = new Post({ postedBy, recipeTitle, text, recipeOrigin, cookingTime, img, tags, ingredients, directions });
 		await newPost.save();
 
 		res.status(201).json(newPost);
@@ -40,6 +40,7 @@ const createPost = async (req, res) => {
 		console.log(err);
 	}
 };
+
 
 const getPost = async (req, res) => {
 	try {
@@ -54,6 +55,7 @@ const getPost = async (req, res) => {
 		res.status(500).json({ error: err.message });
 	}
 };
+
 
 const deletePost = async (req, res) => {
 	try {

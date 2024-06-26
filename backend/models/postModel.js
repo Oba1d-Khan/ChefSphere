@@ -34,6 +34,14 @@ const postSchema = mongoose.Schema(
         tags: {
             type: String,
         },
+        ingredients: {
+            type: [String],
+            required: false,
+        },
+        directions: {
+            type: [String],
+            required: false,
+        },
         likes: {
             type: [mongoose.Schema.Types.ObjectId],
             ref: "User",

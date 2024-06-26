@@ -15,6 +15,7 @@ import {
 	ModalOverlay,
 	Text,
 	Textarea,
+	VStack,
 	useColorModeValue,
 	useDisclosure,
 } from "@chakra-ui/react";
@@ -38,6 +39,8 @@ const CreatePost = () => {
 	const [cookingTime, setCookingTime] = useState("");
 	const [recipeOrigin, setRecipeOrigin] = useState("");
 	const [tags, setTags] = useState("");
+	const [ingredients, setIngredients] = useState("");
+	const [directions, setDirections] = useState("");
 	const { handleImageChange, imgUrl, setImgUrl } = usePreviewImg();
 	const imageRef = useRef(null);
 	const [remainingChar, setRemainingChar] = useState(MAX_CHAR);
@@ -60,19 +63,16 @@ const CreatePost = () => {
 	const handleRecipeOrigin = (e) => {
 		const inputRecipeOrigin = e.target.value;
 		setRecipeOrigin(inputRecipeOrigin);
-		console.log(inputRecipeOrigin);
 	};
 
 	const handleCookingTime = (e) => {
 		const inputCookingTime = e.target.value;
 		setCookingTime(inputCookingTime);
-		console.log(inputCookingTime);
 	};
 
 	const handleTags = (e) => {
 		const inputTags = e.target.value;
 		setTags(inputTags);
-		console.log(inputTags);
 	};
 
 	const handleCreatePost = async () => {
@@ -91,10 +91,11 @@ const CreatePost = () => {
 					recipeOrigin: recipeOrigin,
 					img: imgUrl,
 					tags: tags,
+					ingredients: ingredients.split('\n').filter(item => item.trim() !== ""),
+					directions: directions.split('\n').filter(item => item.trim() !== ""),
 				}),
 			});
 			const data = await res.json();
-			console.log(data);
 
 			if (data.error) {
 				showToast("Error", data.error, "error");
@@ -112,6 +113,8 @@ const CreatePost = () => {
 			setCookingTime("");
 			setTags("");
 			setImgUrl("");
+			setIngredients("");
+			setDirections("");
 		} catch (error) {
 			showToast("Error", error, "error");
 		} finally {
@@ -149,9 +152,9 @@ const CreatePost = () => {
 								textAlign={"left"}
 								m={"1"}
 								py={2}
-								color={"white"}
+								color={"gray.800"}
 							>
-								Title{" "}
+								Title
 							</Text>
 
 							<Textarea
@@ -168,7 +171,7 @@ const CreatePost = () => {
 								py={2}
 								color={"gray.800"}
 							>
-								remaining
+								{remainingChar}/{MAX_CHAR}
 							</Text>
 
 							<Text
@@ -177,7 +180,7 @@ const CreatePost = () => {
 								textAlign={"left"}
 								m={"1"}
 								py={2}
-								color={"white"}
+								color={"gray.800"}
 							>
 								Recipe Description
 							</Text>
@@ -199,22 +202,12 @@ const CreatePost = () => {
 							/>
 
 							<Text
-								fontSize="xs"
-								fontWeight="bold"
-								textAlign={"right"}
-								m={"1"}
-								color={"gray.800"}
-							>
-								{remainingChar}/{MAX_CHAR}
-							</Text>
-
-							<Text
 								fontSize="lg"
 								fontWeight="bold"
 								textAlign={"left"}
 								m={"1"}
 								py={2}
-								color={"white"}
+								color={"gray.800"}
 							>
 								Cooking Time
 							</Text>
@@ -230,7 +223,7 @@ const CreatePost = () => {
 								textAlign={"left"}
 								m={"1"}
 								py={2}
-								color={"white"}
+								color={"gray.800"}
 							>
 								Recipe Origin
 							</Text>
@@ -246,7 +239,7 @@ const CreatePost = () => {
 								textAlign={"left"}
 								m={"1"}
 								py={2}
-								color={"white"}
+								color={"gray.800"}
 							>
 								Tags
 							</Text>
@@ -254,6 +247,38 @@ const CreatePost = () => {
 								placeholder="E.g: Chicken, Desi, Spicy..."
 								onChange={handleTags}
 								value={tags}
+							/>
+
+							<Text
+								fontSize="lg"
+								fontWeight="bold"
+								textAlign={"left"}
+								m={"1"}
+								py={2}
+								color={"gray.800"}
+							>
+								Ingredients
+							</Text>
+							<Textarea
+								placeholder="Enter each ingredient on a new line"
+								onChange={(e) => setIngredients(e.target.value)}
+								value={ingredients}
+							/>
+
+							<Text
+								fontSize="lg"
+								fontWeight="bold"
+								textAlign={"left"}
+								m={"1"}
+								py={2}
+								color={"gray.800"}
+							>
+								Directions
+							</Text>
+							<Textarea
+								placeholder="Enter each direction on a new line"
+								onChange={(e) => setDirections(e.target.value)}
+								value={directions}
 							/>
 
 							<Input

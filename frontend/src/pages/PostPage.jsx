@@ -11,6 +11,10 @@ import {
     Input,
     Spinner,
     Text,
+    VStack,
+    Checkbox,
+    HStack,
+    SimpleGrid,
 } from "@chakra-ui/react";
 import { Star } from 'lucide-react';
 import Actions from "../components/Actions";
@@ -34,7 +38,6 @@ import {
     TwitterIcon,
     WhatsappIcon,
 } from "react-share";
-import axios from "axios";
 import Rating from "../components/Rating";
 
 const PostPage = () => {
@@ -129,7 +132,6 @@ const PostPage = () => {
     }
 
     if (!currentPost) return null;
-    console.log("currentPost", currentPost);
 
     const scrollToComments = () => {
         scroll.scrollTo(commentsRef.current.offsetTop, {
@@ -143,7 +145,7 @@ const PostPage = () => {
 
     return (
         <>
-            <Flex py={"10"} gap={6}>Post Page
+            <Flex py={"10"} gap={6}>
                 <Flex w={"full"} alignItems={"center"} gap={4}>
                     <Avatar src={user.profilePic} size={"md"} />
                     <Flex flexDirection={"column"} gap={1}>
@@ -217,6 +219,34 @@ const PostPage = () => {
                     initialReviewsCount={currentPost.ratings.length}
                 />
             </Flex >
+
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10} mt={10}>
+                <Box>
+                    <Heading as="h3" size="md" mb={4}>
+                        Ingredients
+                    </Heading>
+                    <VStack align="start" spacing={3}>
+                        {currentPost.ingredients && currentPost.ingredients.map((ingredient, index) => (
+                            <Checkbox key={index} colorScheme="green">
+                                {ingredient}
+                            </Checkbox>
+                        ))}
+                    </VStack>
+                </Box>
+                <Box>
+                    <Heading as="h3" size="md" mb={4}>
+                        Directions
+                    </Heading>
+                    <VStack align="start" spacing={4}>
+                        {currentPost.directions && currentPost.directions.map((direction, index) => (
+                            <HStack key={index} align="start">
+                                <Checkbox colorScheme="green" />
+                                <Text>{direction}</Text>
+                            </HStack>
+                        ))}
+                    </VStack>
+                </Box>
+            </SimpleGrid>
 
             <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }} py={4} ref={commentsRef}>
                 Comments

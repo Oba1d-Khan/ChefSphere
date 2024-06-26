@@ -9,6 +9,7 @@ import useGetUserProfile from "../hooks/useGetUserProfile";
 import { useRecoilState } from "recoil";
 import postsAtom from "../atoms/postsAtom";
 import SuggestedUsers from "../components/SuggestedUsers";
+import CreatePost from "../components/CreatePost";
 
 const UserPage = () => {
     const { user, loading } = useGetUserProfile();
@@ -70,6 +71,8 @@ const UserPage = () => {
                 >
                     <SuggestedUsers />
                 </Box>
+                <CreatePost />
+
             </Flex>
         </>
     );
