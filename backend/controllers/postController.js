@@ -5,7 +5,7 @@ import axios from "axios";
 
 const createPost = async (req, res) => {
 	try {
-		const { postedBy, text, recipeTitle, recipeOrigin, cookingTime, tags, ingredients, directions } = req.body;
+		const { postedBy, text, recipeTitle, recipeOrigin, cookingTime, tags, ingredients, directions, servings } = req.body;
 		let { img } = req.body;
 
 		if (!postedBy || !recipeTitle || !text || !cookingTime || !recipeOrigin) {
@@ -31,7 +31,7 @@ const createPost = async (req, res) => {
 			img = uploadedResponse.secure_url;
 		}
 
-		const newPost = new Post({ postedBy, recipeTitle, text, recipeOrigin, cookingTime, img, tags, ingredients, directions });
+		const newPost = new Post({ postedBy, recipeTitle, text, recipeOrigin, cookingTime, img, tags, ingredients, directions, servings });
 		await newPost.save();
 
 		res.status(201).json(newPost);

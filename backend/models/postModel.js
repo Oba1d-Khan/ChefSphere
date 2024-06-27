@@ -42,6 +42,10 @@ const postSchema = mongoose.Schema(
             type: [String],
             required: false,
         },
+        servings: {
+            type: String,
+            required: false,
+        },
         likes: {
             type: [mongoose.Schema.Types.ObjectId],
             ref: "User",

@@ -248,6 +248,13 @@ const PostPage = () => {
                 </Box>
             </SimpleGrid>
 
+            <Box mt={10}>
+                <Heading as="h3" size="md" mb={4}>
+                    Servings
+                </Heading>
+                <Text>{currentPost.servings}</Text>
+            </Box>
+
             <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }} py={4} ref={commentsRef}>
                 Comments
             </Heading>

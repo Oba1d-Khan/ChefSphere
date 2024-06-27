@@ -46,6 +46,7 @@ const CreatePost = () => {
 	const [tags, setTags] = useState("");
 	const [ingredients, setIngredients] = useState("");
 	const [directions, setDirections] = useState("");
+	const [servings, setServings] = useState("");
 	const { handleImageChange, imgUrl, setImgUrl } = usePreviewImg();
 	const imageRef = useRef(null);
 	const [remainingChar, setRemainingChar] = useState(MAX_CHAR);
@@ -95,6 +96,7 @@ const CreatePost = () => {
 					tags: tags,
 					ingredients: ingredients.split('\n').filter(item => item.trim() !== ""),
 					directions: directions.split('\n').filter(item => item.trim() !== ""),
+					servings: servings,
 				}),
 			});
 			const data = await res.json();
@@ -118,6 +120,7 @@ const CreatePost = () => {
 			setImgUrl("");
 			setIngredients("");
 			setDirections("");
+			setServings("");
 			setRemainingChar(MAX_CHAR);
 		} catch (error) {
 			showToast("Error", error, "error");
@@ -226,8 +229,6 @@ const CreatePost = () => {
 												</option>
 											))}
 										</Select>
-
-
 									</Box>
 								</HStack>
 							</FormControl>
@@ -259,6 +260,23 @@ const CreatePost = () => {
 									/>
 								</FormControl>
 							</HStack>
+
+							<FormControl>
+								<FormLabel fontWeight="bold">Servings</FormLabel>
+								<Select
+									placeholder="Select Servings"
+									onChange={(e) => setServings(e.target.value)}
+									value={servings}
+									borderColor="gray.300"
+									focusBorderColor="green.500"
+									bg={useColorModeValue("white", "gray.700")}
+								>
+									<option value="1 persons">Solo (1 person)</option>
+									<option value="2 persons">Duo (2 persons)</option>
+									<option value="4-6 persons">Family (4-6 persons)</option>
+									<option value="8+ persons">Party (8+ persons)</option>
+								</Select>
+							</FormControl>
 
 							<FormControl>
 								<FormLabel fontWeight="bold">Ingredients</FormLabel>
