@@ -7,10 +7,6 @@ import {
     Grid,
     GridItem,
     Button,
-    Input,
-    InputGroup,
-    InputRightElement,
-    IconButton,
     Heading,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -19,7 +15,8 @@ import { useRecoilState } from "recoil";
 import postsAtom from "../atoms/postsAtom";
 import RecipeSuggester from "../components/RecipeSuggester";
 import RecipeCard from "../components/RecipeCard";
-import { SearchX } from "lucide-react";
+import { AddIcon } from "@chakra-ui/icons";
+import CreatePost from "../components/CreatePost";  // Import CreatePost component
 
 const HomePage = () => {
     const [posts, setPosts] = useRecoilState(postsAtom);
@@ -51,6 +48,7 @@ const HomePage = () => {
         <Box>
             <Container maxW="container.lg" py={8}>
                 <RecipeSuggester />
+                <CreatePost />  {/* Include the CreatePost component */}
             </Container>
 
             <Container maxW="container.lg" py={8}>
