@@ -1,6 +1,6 @@
 import { Avatar } from "@chakra-ui/avatar";
 import { Image } from "@chakra-ui/image";
-import { Box, Flex, Text, IconButton, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import { Box, Flex, Text, IconButton, Menu, MenuButton, MenuItem, MenuList, Button, Input, Textarea } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import Actions from "./Actions";
 import { useEffect, useState } from "react";
@@ -19,6 +19,13 @@ const Post = ({ post, postedBy }) => {
 	const [posts, setPosts] = useRecoilState(postsAtom);
 	const navigate = useNavigate();
 	const [editingPost, setEditingPost] = useState(false);
+	const [editedPost, setEditedPost] = useState({
+		recipeTitle: post.recipeTitle,
+		text: post.text,
+		recipeOrigin: post.recipeOrigin,
+		cookingTime: post.cookingTime,
+		tags: post.tags,
+	});
 
 	useEffect(() => {
 		const getUser = async () => {
@@ -63,6 +70,36 @@ const Post = ({ post, postedBy }) => {
 		setEditingPost(true);
 	};
 
+	const handleSavePost = async () => {
+		try {
+			const res = await fetch(`/api/posts/${post._id}`, {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(editedPost),
+			});
+			const data = await res.json();
+			if (data.error) {
+				showToast("Error", data.error, "error");
+				return;
+			}
+			const updatedPosts = posts.map((p) => (p._id === post._id ? data : p));
+			setPosts(updatedPosts);
+			showToast("Success", "Post updated", "success");
+			setEditingPost(false);
+		} catch (error) {
+			showToast("Error", error.message, "error");
+		}
+	};
+
+	const handleChange = (e) => {
+		setEditedPost({
+			...editedPost,
+			[e.target.name]: e.target.value,
+		});
+	};
+
 	const handleLinkClick = (e) => {
 		if (e.target.closest(".menu-button")) {
 			e.preventDefault();
@@ -70,6 +107,7 @@ const Post = ({ post, postedBy }) => {
 	};
 
 	if (!user) return null;
+
 	return (
 		<Flex gap={3} mb={4} py={5}>
 			<Flex flexDirection={"column"} alignItems={"center"}>
@@ -121,33 +159,74 @@ const Post = ({ post, postedBy }) => {
 					</Flex>
 				</Flex>
 
-				<Link to={`/${user.username}/post/${post._id}`}>
-					<Text my={3} fontSize={"2xl"} color={"black"}>{post.recipeTitle}</Text>
-
-					<Flex gap={3} my={1}>
-						<Flex gap={3}>
-							<Actions post={post} />
+				{editingPost ? (
+					<Flex flexDirection={"column"} gap={3} my={3}>
+						<Input
+							name="recipeTitle"
+							value={editedPost.recipeTitle}
+							onChange={handleChange}
+							placeholder="Recipe Title"
+						/>
+						<Textarea
+							name="text"
+							value={editedPost.text}
+							onChange={handleChange}
+							placeholder="Recipe Description"
+						/>
+						<Input
+							name="recipeOrigin"
+							value={editedPost.recipeOrigin}
+							onChange={handleChange}
+							placeholder="Recipe Origin"
+						/>
+						<Input
+							name="cookingTime"
+							value={editedPost.cookingTime}
+							onChange={handleChange}
+							placeholder="Cooking Time"
+						/>
+						<Input
+							name="tags"
+							value={editedPost.tags}
+							onChange={handleChange}
+							placeholder="Tags"
+						/>
+						<Flex gap={2} justifyContent={"flex-end"}>
+							<Button onClick={() => setEditingPost(false)}>Cancel</Button>
+							<Button onClick={handleSavePost} colorScheme="blue">Save</Button>
 						</Flex>
-						{post.img && (
-							<Box borderRadius={6} overflow={"hidden"} border={"1px solid"} borderColor={"gray.light"}>
-								<Image src={post.img} w={"full"} minHeight={"xl"} />
-							</Box>
-						)}
 					</Flex>
+				) : (
+					<>
+						<Link to={`/${user.username}/post/${post._id}`}>
+							<Text my={3} fontSize={"2xl"} color={"black"}>{post.recipeTitle}</Text>
 
-					<Flex gap={3} my={3} flexDirection={"column"}>
-						<Box fontSize={"md"}>{parse(post.text)}</Box>
-						<Text fontSize={"md"}>{post.recipeOrigin}</Text>
-						<Text fontSize={"md"}>{post.cookingTime}</Text>
-					</Flex>
-					<Text fontSize={"md"}>{post.tags}</Text>
+							<Flex gap={3} my={1}>
+								<Flex gap={3}>
+									<Actions post={post} />
+								</Flex>
+								{post.img && (
+									<Box borderRadius={6} overflow={"hidden"} border={"1px solid"} borderColor={"gray.light"}>
+										<Image src={post.img} w={"full"} minHeight={"xl"} />
+									</Box>
+								)}
+							</Flex>
 
-					{post.replies.length === 0 && <Text textAlign={"center"} color={"gray.light"} fontSize={"xs"}>no comments yet</Text>}
-				</Link >
+							<Flex gap={3} my={3} flexDirection={"column"}>
+								<Box fontSize={"md"}>{parse(post.text)}</Box>
+								<Text fontSize={"md"}>{post.recipeOrigin}</Text>
+								<Text fontSize={"md"}>{post.cookingTime}</Text>
+							</Flex>
+							<Text fontSize={"md"}>{post.tags}</Text>
+
+							{post.replies.length === 0 && <Text textAlign={"center"} color={"gray.light"} fontSize={"xs"}>no comments yet</Text>}
+						</Link>
+					</>
+
+				)}
 
 			</Flex>
-
-		</Flex >
+		</Flex>
 	);
 };
 
