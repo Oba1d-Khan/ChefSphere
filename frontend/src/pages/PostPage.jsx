@@ -52,6 +52,22 @@ const PostPage = () => {
     const [isReplying, setIsReplying] = useState(false);
     const currentPost = posts[0];
     const commentsRef = useRef(null);
+    const [checkedIngredients, setCheckedIngredients] = useState({});
+    const [checkedDirections, setCheckedDirections] = useState({});
+
+    const handleIngredientCheck = (index) => {
+        setCheckedIngredients((prevState) => ({
+            ...prevState,
+            [index]: !prevState[index],
+        }));
+    };
+
+    const handleDirectionCheck = (index) => {
+        setCheckedDirections((prevState) => ({
+            ...prevState,
+            [index]: !prevState[index],
+        }));
+    };
 
     useEffect(() => {
         const getPost = async () => {
@@ -191,7 +207,7 @@ const PostPage = () => {
                 {currentPost.img && (
                     <Box
                         mb={10}
-                        maxWidth={"lg"}
+                        maxWidth={"2xl"}
                         borderRadius={6}
                         overflow={"hidden"}
                         border={"1px solid"}
@@ -217,6 +233,7 @@ const PostPage = () => {
                     postId={currentPost._id}
                     initialRating={currentPost.averageRating}
                     initialReviewsCount={currentPost.ratings.length}
+                    size={30} // Adjust the size as per your design needs
                 />
             </Flex >
 
@@ -227,9 +244,19 @@ const PostPage = () => {
                     </Heading>
                     <VStack align="start" spacing={3}>
                         {currentPost.ingredients && currentPost.ingredients.map((ingredient, index) => (
-                            <Checkbox key={index} colorScheme="green">
-                                {ingredient}
-                            </Checkbox>
+                            <HStack key={index} onClick={() => handleIngredientCheck(index)} cursor="pointer">
+                                <Checkbox
+                                    colorScheme="green"
+                                    isChecked={checkedIngredients[index]}
+                                    onChange={() => handleIngredientCheck(index)}
+                                />
+                                <Text
+                                    as={checkedIngredients[index] ? "del" : "span"}
+                                    transition="all 0.3s ease-in-out"
+                                >
+                                    {ingredient}
+                                </Text>
+                            </HStack>
                         ))}
                     </VStack>
                 </Box>
@@ -239,9 +266,18 @@ const PostPage = () => {
                     </Heading>
                     <VStack align="start" spacing={4}>
                         {currentPost.directions && currentPost.directions.map((direction, index) => (
-                            <HStack key={index} align="start">
-                                <Checkbox colorScheme="green" />
-                                <Text>{direction}</Text>
+                            <HStack key={index} onClick={() => handleDirectionCheck(index)} cursor="pointer">
+                                <Checkbox
+                                    colorScheme="green"
+                                    isChecked={checkedDirections[index]}
+                                    onChange={() => handleDirectionCheck(index)}
+                                />
+                                <Text
+                                    as={checkedDirections[index] ? "del" : "span"}
+                                    transition="all 0.3s ease-in-out"
+                                >
+                                    {direction}
+                                </Text>
                             </HStack>
                         ))}
                     </VStack>
@@ -260,38 +296,37 @@ const PostPage = () => {
             </Heading>
             <Divider my={4} />
 
-            {
-                showCommentInput && (
-                    <Flex flexDirection="column" mt={4} p={4} border="1px" borderColor="gray.200" borderRadius="md">
-                        <FormControl>
-                            <Input
-                                placeholder='Write a comment...'
-                                value={reply}
-                                onChange={(e) => setReply(e.target.value)}
-                            />
-                        </FormControl>
-                        <Flex mt={2} justifyContent="flex-end">
-                            <Button size="sm" colorScheme="whatsapp" isLoading={isReplying} onClick={handleReply}>
-                                Post Comment
-                            </Button>
-                        </Flex>
+            {showCommentInput && (
+                <Flex flexDirection="column" mt={4} p={4} border="1px" borderColor="gray.200" borderRadius="md">
+                    <FormControl>
+                        <Input
+                            placeholder='Write a comment...'
+                            value={reply}
+                            onChange={(e) => setReply(e.target.value)}
+                        />
+                    </FormControl>
+                    <Flex mt={2} justifyContent="flex-end">
+                        <Button size="sm" colorScheme="whatsapp" isLoading={isReplying} onClick={handleReply}>
+                            Post Comment
+                        </Button>
                     </Flex>
-                )
-            }
+                </Flex>
+            )}
 
-            {
-                currentPost.replies.map((reply) => (
-                    <Comment
-                        key={reply._id}
-                        reply={reply}
-                        lastReply={
-                            reply._id === currentPost.replies[currentPost.replies.length - 1]._id
-                        }
-                    />
-                ))
-            }
+            {currentPost.replies.map((reply) => (
+                <Comment
+                    key={reply._id}
+                    reply={reply}
+                    lastReply={
+                        reply._id === currentPost.replies[currentPost.replies.length - 1]._id
+                    }
+                />
+            ))}
         </>
     );
+
+
+
 };
 
 export default PostPage;
