@@ -81,6 +81,23 @@ const deletePost = async (req, res) => {
 	}
 };
 
+const updatePost = async (req, res) => {
+	try {
+		const { id } = req.params;
+		const updatedData = req.body;
+
+		const updatedPost = await Post.findByIdAndUpdate(id, updatedData, { new: true });
+
+		if (!updatedPost) {
+			return res.status(404).json({ error: "Post not found" });
+		}
+
+		res.status(200).json(updatedPost);
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+};
+
 const likeUnlikePost = async (req, res) => {
 	try {
 		const { id: postId } = req.params;
@@ -261,4 +278,4 @@ const ratePost = async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 };
-export { createPost, getPost, deletePost, likeUnlikePost, replyToPost, getFeedPosts, getUserPosts, searchPosts, getAllRecipes, suggestRecipes, ratePost };
+export { createPost, getPost, deletePost, updatePost, likeUnlikePost, replyToPost, getFeedPosts, getUserPosts, searchPosts, getAllRecipes, suggestRecipes, ratePost };

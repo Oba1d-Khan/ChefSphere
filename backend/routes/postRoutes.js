@@ -9,7 +9,8 @@ import {
     getUserPosts,
     searchPosts,
     suggestRecipes,
-    ratePost
+    ratePost,
+    updatePost
 } from "../controllers/postController.js";
 import protectRoute from "../middlewares/protectRoute.js";
 
@@ -18,6 +19,7 @@ const router = express.Router();
 router.get("/feed", protectRoute, getFeedPosts);
 router.get("/search", searchPosts);
 router.get("/:id", getPost);
+router.put("/:id", protectRoute, updatePost);
 router.get("/user/:username", getUserPosts);
 router.post("/create", protectRoute, createPost);
 router.delete("/:id", protectRoute, deletePost);
