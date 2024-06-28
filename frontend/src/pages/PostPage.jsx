@@ -16,7 +16,7 @@ import {
     HStack,
     SimpleGrid,
 } from "@chakra-ui/react";
-import { Star } from 'lucide-react';
+import { Star, Users } from 'lucide-react';
 import Actions from "../components/Actions";
 import { useEffect, useRef, useState } from "react";
 import Comment from "../components/Comment";
@@ -181,6 +181,12 @@ const PostPage = () => {
                         <Utensils />
                         {currentPost.recipeOrigin}
                     </Text>
+                    <Dot />
+                    <Text fontSize={"sm"} display={"flex"} gap={3}>
+                        <Users />
+                        {currentPost.servings}
+                    </Text>
+
                 </Flex>
                 <Flex gap={4} alignItems={"center"}>
                     <Flex gap={2}>
@@ -228,13 +234,14 @@ const PostPage = () => {
                 </Text>
             </Flex>
 
-            <Flex justifyContent="center" mt={3} gap={1}>
+            <Flex justifyContent="flex-start" mt={5} gap={1}>
                 <Rating
                     postId={currentPost._id}
                     initialRating={currentPost.averageRating}
                     initialReviewsCount={currentPost.ratings.length}
-                    size={30} // Adjust the size as per your design needs
+                    size={60} // Adjust the size as per your design needs
                 />
+
             </Flex >
 
             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10} mt={10}>
