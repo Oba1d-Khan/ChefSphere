@@ -185,10 +185,10 @@ const RecipePage = () => {
                         onChange={(e) => setFilters({ ...filters, cookingTime: e.target.value })}
                         maxW="200px"
                     >
-                        <option value="5">Less than 5 mins</option>
-                        <option value="10">Less than 10 mins</option>
                         <option value="30">Less than 30 mins</option>
                         <option value="60">Less than 1 hour</option>
+                        <option value="90">Less than 1.5 hour</option>
+
                     </Select>
                     <Button onClick={resetFilters} colorScheme="red" variant="outline" size="sm">
                         Reset Filters
