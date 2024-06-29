@@ -224,8 +224,8 @@ const RecipePage = () => {
 
                 <Box mt={8}>
                     {!searchClicked && (
-                        <Heading as="h2" size="lg" mb={4} textAlign="center">
-                            Simple and tasty recipes
+                        <Heading as="h1" size="lg" my={4} textAlign="center">
+                            Other Related Recipes
                         </Heading>
                     )}
                     {loading && (
