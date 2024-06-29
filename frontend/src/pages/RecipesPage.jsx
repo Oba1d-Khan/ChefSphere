@@ -135,7 +135,8 @@ const RecipePage = () => {
                             )}
                         </InputRightElement>
                     </InputGroup>
-                    <Button onClick={handleSearch} colorScheme="teal" size="lg" rounded="full">
+                    <Button onClick={handleSearch} colorScheme="teal" size="lg" rounded="full" bgGradient="linear(to-l, #5ED20A, #9CCC65)"
+                            _hover={{ bgGradient: 'linear(to-r, #5ED20A, #9CCC65)', opacity: 0.9 ,transform: "scale(1.05)" }}>
                         Search
                     </Button>
                 </Flex>
