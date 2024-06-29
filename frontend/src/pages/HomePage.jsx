@@ -117,6 +117,37 @@ const HomePage = () => {
 		<Box>
 			<HeroSection />
 
+				{/* Categories Section */}
+				<Box maxW="1400px" mx="auto" py={4}>
+				<Flex justifyContent="space-between" alignItems="center" mb={4}>
+					<Heading as="h3" size="lg">
+						Categories
+					</Heading>
+					<Button variant="outline" colorScheme="teal" rounded="full">
+						View All Categories
+					</Button>
+				</Flex>
+				<SimpleGrid columns={{ base: 2, md: 3, lg: 6 }} spacing={4}>
+					{categoryData.map((category) => (
+						<Box
+							textAlign="center"
+							key={category.name}
+							bg={`linear-gradient(to top, ${category.color} 10%, rgba(255, 255, 255, 0) 100%)`}
+							py={6}
+							borderRadius="2xl"
+							transition="transform 0.3s"
+							_hover={{ transform: "scale(1.05)" }}
+							cursor={"pointer"}
+						>
+							<Image src={category.icon} alt={category.name} mx="auto" boxSize="60px" />
+							<Text mt={4} fontWeight="medium">{category.name}</Text>
+						</Box>
+					))}
+				</SimpleGrid>
+
+			</Box>
+
+
 			{/* Search Section */}
 			<Box maxW="1400px" mx="auto" py={4} textAlign="center">
 				<Flex maxW="600px" mx={"auto"}>
@@ -149,40 +180,11 @@ const HomePage = () => {
 							)}
 						</InputRightElement>
 					</InputGroup>
-					<Button ml={4} colorScheme="teal" rounded="full">
+					<Button ml={4} colorScheme="teal" rounded="full" onClick={handleSearch}  bgGradient="linear(to-l, #5ED20A, #9CCC65)"
+                            _hover={{ bgGradient: 'linear(to-r, #5ED20A, #9CCC65)', opacity: 0.9 ,transform: "scale(1.05)" }}>
 						Search
 					</Button>
 				</Flex>
-			</Box>
-
-			{/* Categories Section */}
-			<Box maxW="1400px" mx="auto" py={4}>
-				<Flex justifyContent="space-between" alignItems="center" mb={4}>
-					<Heading as="h3" size="lg">
-						Categories
-					</Heading>
-					<Button variant="outline" colorScheme="teal" rounded="full">
-						View All Categories
-					</Button>
-				</Flex>
-				<SimpleGrid columns={{ base: 2, md: 3, lg: 6 }} spacing={4}>
-					{categoryData.map((category) => (
-						<Box
-							textAlign="center"
-							key={category.name}
-							bg={`linear-gradient(to top, ${category.color} 10%, rgba(255, 255, 255, 0) 100%)`}
-							py={6}
-							borderRadius="2xl"
-							transition="transform 0.3s"
-							_hover={{ transform: "scale(1.05)" }}
-							cursor={"pointer"}
-						>
-							<Image src={category.icon} alt={category.name} mx="auto" boxSize="60px" />
-							<Text mt={4} fontWeight="medium">{category.name}</Text>
-						</Box>
-					))}
-				</SimpleGrid>
-
 			</Box>
 
 			<Container maxW="container.lg" py={8}>
