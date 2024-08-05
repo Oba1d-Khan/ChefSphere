@@ -189,19 +189,40 @@ const getUserPosts = async (req, res) => {
 };
 
 const searchPosts = async (req, res) => {
-	try {
-		const search = req.query.q;
-		console.log("search :", search);
-		if (!search) {
-			return res.status(400).json({ error: "Search query is required" });
-		}
-		const searchedPosts = await Post.find({ recipeTitle: { $regex: search, $options: 'i' } });
+    try {
+        const { q, rating, cookingTime, servings, origin } = req.query;
 
-		res.status(200).json(searchedPosts);
-	} catch (err) {
-		res.status(500).json({ error: err.message });
-	}
+        // Construct the search query
+        let searchQuery = {};
+
+        if (q) {
+            searchQuery.recipeTitle = { $regex: q, $options: 'i' };
+        }
+        
+        if (rating) {
+            searchQuery.averageRating = { $gte: Number(rating) };
+        }
+
+        if (cookingTime) {
+            searchQuery.cookingTime = { $lte: Number(cookingTime) };
+        }
+
+        if (servings) {
+            searchQuery.servings = { $gte: Number(servings) };
+        }
+
+        if (origin) {
+            searchQuery.recipeOrigin = { $regex: origin, $options: 'i' };
+        }
+
+        const searchedPosts = await Post.find(searchQuery);
+
+        res.status(200).json(searchedPosts);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
+
 
 
 const getAllRecipes = async (req, res) => {
@@ -215,30 +236,31 @@ const getAllRecipes = async (req, res) => {
 
 
 const suggestRecipes = async (req, res) => {
-	const { ingredients, searchType } = req.body;
+    const { ingredients, searchType } = req.body;
 
-	try {
-		if (!ingredients || ingredients.length === 0) {
-			return res.status(400).json({ error: "Ingredients are required" });
-		}
+    try {
+        if (!ingredients || ingredients.length === 0) {
+            return res.status(400).json({ error: "Ingredients are required" });
+        }
 
-		let recipes;
-		if (searchType === "ingredients") {
-			const searchRegex = new RegExp(ingredients.join("|"), "i");
-			recipes = await Post.find({ text: { $regex: searchRegex } });
-		} else if (searchType === "recipe") {
-			const searchRegex = new RegExp(ingredients.join("|"), "i");
-			recipes = await Post.find({ recipeTitle: { $regex: searchRegex } });
-		} else {
-			return res.status(400).json({ error: "Invalid search type" });
-		}
+        let recipes;
+        const searchRegex = new RegExp(ingredients.join("|"), "i");
 
-		res.status(200).json(recipes);
-	} catch (error) {
-		console.error('Error fetching recipes:', error.message);
-		res.status(500).json({ error: "Failed to fetch recipes" });
-	}
+        if (searchType === "ingredients") {
+            recipes = await Post.find({ ingredients: { $regex: searchRegex } });
+        } else if (searchType === "recipe") {
+            recipes = await Post.find({ recipeTitle: { $regex: searchRegex } });
+        } else {
+            return res.status(400).json({ error: "Invalid search type" });
+        }
+
+        res.status(200).json(recipes);
+    } catch (error) {
+        console.error('Error fetching recipes:', error.message);
+        res.status(500).json({ error: "Failed to fetch recipes" });
+    }
 };
+
 
 const ratePost = async (req, res) => {
 	const { postId, rating } = req.body;
@@ -278,4 +300,6 @@ const ratePost = async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 };
+
+
 export { createPost, getPost, deletePost, updatePost, likeUnlikePost, replyToPost, getFeedPosts, getUserPosts, searchPosts, getAllRecipes, suggestRecipes, ratePost };

@@ -103,7 +103,7 @@ const CommunityPage = () => {
         <Box p={4}>
             <Flex justifyContent="space-between" alignItems="center" mb={6}>
                 <Heading as="h1">Communities</Heading>
-                <Button leftIcon={<AddIcon />} colorScheme="teal" onClick={onOpen}>Add Community</Button>
+                <Button leftIcon={<AddIcon />} bg="blackAlpha.700" _hover={{bg:"black"}} color={'white'} onClick={onOpen}>Add Community</Button>
             </Flex>
             <Box mb={4}>
                 <InputGroup>
@@ -142,7 +142,9 @@ const CommunityPage = () => {
                                 <Button
                                     onClick={() => handleJoinCommunity(community._id)}
                                     size="sm"
-                                    colorScheme="teal"
+                                    color={'white'}
+                                    bgGradient="linear(to-l, #5ED20A, #9CCC65)"
+                                    _hover={{ bgGradient: 'linear(to-r, #5ED20A, #9CCC65)', opacity: 0.9 ,transform: "scale(1.05)" }}
                                     isLoading={joining[community._id]}
                                     leftIcon={joining[community._id] ? null : <CheckIcon />}
                                 >
@@ -179,7 +181,8 @@ const CommunityPage = () => {
                                     required
                                 />
                             </FormControl>
-                            <Button type="submit" colorScheme="teal" width="full">Create</Button>
+                            <Button type="submit" color={'white'} bgGradient="linear(to-l, #5ED20A, #9CCC65)"
+                                    _hover={{ bgGradient: 'linear(to-r, #5ED20A, #9CCC65)', opacity: 0.9 ,transform: "scale(1.05)" }} width="full">Create</Button>
                         </form>
                     </ModalBody>
                 </ModalContent>

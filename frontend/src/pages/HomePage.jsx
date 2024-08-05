@@ -11,7 +11,6 @@ import {
 	Text,
 	Skeleton,
 	Button,
-	Image,
 	SimpleGrid,
 } from "@chakra-ui/react";
 import { useEffect, useState, useCallback } from "react";
@@ -28,21 +27,13 @@ const MotionGrid = motion(Grid);
 
 const cacheKey = 'recipePostsCache';
 
-const categoryData = [
-	{ name: 'Breakfast', color: 'rgba(246, 234, 222, 0.5)', icon: '/breakfast.png' },
-	{ name: 'Vegan', color: 'rgba(220, 250, 240, 0.5)', icon: '/vegan.png' },
-	{ name: 'Meat', color: 'rgba(254, 240, 242, 0.5)', icon: '/meat.png' },
-	{ name: 'Dessert', color: 'rgba(254, 247, 230, 0.5)', icon: '/dessert.png' },
-	{ name: 'Lunch', color: 'rgba(248, 248, 248, 0.5)', icon: '/lunch.png' },
-	{ name: 'Chocolate', color: 'rgba(254, 237, 240, 0.5)', icon: '/chocolate.png' }
-];
-
 const HomePage = () => {
 	const [posts, setPosts] = useRecoilState(postsAtom);
 	const [loading, setLoading] = useState(true);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [searchedPosts, setSearchedPosts] = useState([]);
 	const [searchClicked, setSearchClicked] = useState(false);
+	const [searchType, setSearchType] = useState("recipe");
 	const showToast = useShowToast();
 
 	const fetchPosts = useCallback(async () => {
@@ -83,7 +74,7 @@ const HomePage = () => {
 				return;
 			}
 
-			const res = await fetch(`/api/posts/search?q=${searchQuery}`);
+			const res = await fetch(`/api/posts/search?${searchType === "recipe" ? `q=${searchQuery}` : `ingredients=${searchQuery}`}`);
 			const searchData = await res.json();
 			if (searchData.error) {
 				showToast("Error", searchData.error, "error");
@@ -96,7 +87,7 @@ const HomePage = () => {
 		} finally {
 			setLoading(false);
 		}
-	}, [searchQuery, showToast]);
+	}, [searchQuery, searchType, showToast]);
 
 	useEffect(() => {
 		if (searchQuery) {
@@ -121,70 +112,58 @@ const HomePage = () => {
 
 			{/* Search Section */}
 			<Box maxW="1400px" mx="auto" py={4} textAlign="center">
-				<Flex maxW="600px" mx={"auto"}>
-					<InputGroup>
-						<Input
-							type="text"
-							value={searchQuery}
-							onChange={(e) => setSearchQuery(e.target.value)}
-							bg="whitesmoke"
-							rounded="full"
-							py={2}
-							px={6}
-							focusBorderColor="green.300"
-							placeholder="Search delicious recipes..."
-							w="full"
-							borderColor={"green.200"}
-						/>
-						<InputRightElement>
-							{searchQuery && (
-								<IconButton
-									aria-label="Clear search"
-									icon={<SearchX />}
-									onClick={clearSearch}
-									size="sm"
-									bg="red.200"
-									color="white"
-									_hover={{ bg: "red.300" }}
-									rounded="full"
-								/>
-							)}
-						</InputRightElement>
-					</InputGroup>
-					<Button ml={4} colorScheme="teal" rounded="full">
-						Search
-					</Button>
-				</Flex>
-			</Box>
-
-			{/* Categories Section */}
-			<Box maxW="1400px" mx="auto" py={4}>
-				<Flex justifyContent="space-between" alignItems="center" mb={4}>
-					<Heading as="h3" size="lg">
-						Categories
-					</Heading>
-					<Button variant="outline" colorScheme="teal" rounded="full">
-						View All Categories
-					</Button>
-				</Flex>
-				<SimpleGrid columns={{ base: 2, md: 3, lg: 6 }} spacing={4}>
-					{categoryData.map((category) => (
-						<Box
-							textAlign="center"
-							key={category.name}
-							bg={`linear-gradient(to top, ${category.color} 10%, rgba(255, 255, 255, 0) 100%)`}
-							py={6}
-							borderRadius="2xl"
-							transition="transform 0.3s"
-							_hover={{ transform: "scale(1.05)" }}
-							cursor={"pointer"}
+				<Flex maxW="600px" mx={"auto"} direction="column" alignItems="center">
+					<Flex mb={4}>
+						<Button
+							colorScheme={searchType === "recipe" ? "teal" : "gray"}
+							onClick={() => setSearchType("recipe")}
+							mr={2}
 						>
-							<Image src={category.icon} alt={category.name} mx="auto" boxSize="60px" />
-							<Text mt={4} fontWeight="medium">{category.name}</Text>
-						</Box>
-					))}
-				</SimpleGrid>
-
+							Search by Recipe
+						</Button>
+						<Button
+							colorScheme={searchType === "ingredients" ? "teal" : "gray"}
+							onClick={() => setSearchType("ingredients")}
+						>
+							Search by Ingredients
+						</Button>
+					</Flex>
+					<Flex width="100%">
+						<InputGroup>
+							<Input
+								type="text"
+								value={searchQuery}
+								onChange={(e) => setSearchQuery(e.target.value)}
+								bg="whitesmoke"
+								rounded="full"
+								py={2}
+								px={6}
+								focusBorderColor="green.300"
+								placeholder={`Search delicious ${searchType}...`}
+								w="full"
+								borderColor={"green.200"}
+							/>
+							<InputRightElement>
+								{searchQuery && (
+									<IconButton
+										aria-label="Clear search"
+										icon={<SearchX />}
+										onClick={clearSearch}
+										size="sm"
+										bg="red.200"
+										color="white"
+										_hover={{ bg: "red.300" }}
+										rounded="full"
+									/>
+								)}
+							</InputRightElement>
+						</InputGroup>
+						<Button ml={4} colorScheme="teal" rounded="full" onClick={handleSearch}  bgGradient="linear(to-l, #5ED20A, #9CCC65)"
+                            _hover={{ bgGradient: 'linear(to-r, #5ED20A, #9CCC65)', opacity: 0.9 ,transform: "scale(1.05)" }}>
+							Search
+						</Button>
+					</Flex>
+				</Flex>
 			</Box>
 
 			<Container maxW="container.lg" py={8}>
