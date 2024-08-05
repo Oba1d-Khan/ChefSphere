@@ -22,6 +22,7 @@ import useShowToast from "../hooks/useShowToast";
 import postsAtom from "../atoms/postsAtom";
 import HeroSection from "../components/Hero";
 import RecipeCard from "../components/RecipeCard";
+import CreatePost from "../components/CreatePost";
 
 const MotionGrid = motion(Grid);
 
@@ -116,6 +117,7 @@ const HomePage = () => {
 	return (
 		<Box>
 			<HeroSection />
+			<CreatePost />
 
 			{/* Search Section */}
 			<Box maxW="1400px" mx="auto" py={4} textAlign="center">
